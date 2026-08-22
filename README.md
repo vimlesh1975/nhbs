@@ -1,82 +1,167 @@
-# CasparCG Client Next.js App & MySQL Graphics Playout Controller
+# NHBS - Newsroom Headlines & Graphics Playout Studio
 
-A modern, high-performance Next.js application that serves as a professional **CasparCG Broadcast Client** connected to a **MySQL Database**. 
+A professional, high-performance Next.js application designed as a live **Newsroom Control System (NRCS) Graphics Client** for **CasparCG Broadcast Server** connected to a **MySQL NRCS Database (`nrcsnew`)**.
 
-It allows broadcast operators to query graphics records from MySQL, map fields onto CasparCG HTML graphics templates, and trigger live playout (ADD, PLAY, UPDATE, STOP, CLEAR) over CasparCG's **AMCP (Advanced Media Control Protocol) TCP Socket (Port 5250)**.
-
----
-
-## 🌟 Key Features
-
-1. **CasparCG AMCP TCP Socket Controller**:
-   - Sends real-time TCP socket commands to CasparCG Server (`127.0.0.1:5250`).
-   - Supports `CG ADD`, `CG PLAY`, `CG UPDATE`, `CG STOP`, `CG REMOVE`, `CLEAR CHANNEL`, and raw AMCP command execution.
-   - Built-in TCP telemetry monitor with auto-fallback to interactive simulation mode when CasparCG Server is offline.
-
-2. **MySQL Database Data Explorer**:
-   - Queries tables (`lower_thirds`, `news_tickers`, `breaking_news`, `scoreboards`).
-   - Built-in search, filtering, and 1-click **"Parse & Cue"** field mapping.
-   - Includes automatic mock database fallback if live MySQL is not connected.
-
-3. **CasparCG HTML Graphics Templates Included**:
-   - `/templates/lower-third` — Glassmorphism name & title lower third graphic.
-   - `/templates/ticker` — Bottom news ticker overlay strip.
-   - `/templates/breaking-news` — Red flashing alert banner.
-   - `/templates/scoreboard` — TV sports scorebug.
-   - Standard CasparCG HTML JS functions implemented (`window.play()`, `window.stop()`, `window.update(data)`).
-
-4. **Master Control Room UI**:
-   - Broadcast channel router (Channels 1-4, Layers 1-30).
-   - Real-time monospaced AMCP terminal response logger.
-   - 16:9 interactive web preview modal.
+Built for television broadcast operators, newsroom directors, and MCR engineers, this application provides instant database-driven graphics playout, multi-layer routing, 2-line lower third graphics, and real-time live AMCP Mixer positioning & scaling controls.
 
 ---
 
-## 🛠️ Quick Setup & Installation
+## 🌟 Key Features & Architecture
 
-### 1. Install Dependencies
+### 📰 1. 3-Column Newsroom Data Explorer
+- **Broadcast Date & Bulletin Selector**: Easily select broadcast dates and news bulletins from the MySQL database.
+- **HEADLINES (Layer 2)**:
+  - Queries records with `SlugName = 'headlines'`.
+  - Routes playout directly to **Channel 1 — Layer 2 (`1-2`)**.
+  - Template: `http://127.0.0.1:3000/templates/lower-third` (Custom transparent overlay).
+- **ONELINER (Layer 3)**:
+  - Queries records with `SlugName = 'oneliner'`.
+  - Routes playout directly to **Channel 1 — Layer 3 (`1-3`)**.
+  - Template: `http://127.0.0.1:3000/templates/oneliner` (Dark glassmorphism background strip bar).
+- **TWOLINER (Layer 4)**:
+  - Queries records with `SlugName = 'twoliner'`.
+  - Automatically parses `Name $$$$ Designation` format into stacked Line 1 (Name) & Line 2 (Designation) editable fields.
+  - Routes playout directly to **Channel 1 — Layer 4 (`1-4`)**.
+  - Template: `http://127.0.0.1:3000/templates/twoliner` (2-line animated lower third strip).
+
+---
+
+### 🎛️ 2. Real-Time Live AMCP Mixer Controls
+- **4-DOF Layer Manipulation** for Layer 2, Layer 3, and Layer 4:
+  - **X**: Horizontal position offset (`0.01` step).
+  - **Y**: Vertical position offset (`0.01` step).
+  - **SX**: Horizontal Scale Factor (`0.05` step, default `1.0`).
+  - **SY**: Vertical Scale Factor (`0.05` step, default `1.0`).
+- **Live Real-Time Execution**: Adjusting numeric values automatically dispatches AMCP commands live on air:
+  ```amcp
+  MIXER 1-2 FILL 0.05 -0.02 0.95 0.95
+  ```
+- **RST Button**: Instantly resets positioning and issues `MIXER 1-X CLEAR`.
+- **Persistent Settings**: All Mixer parameters auto-save to browser `localStorage` and persist across page reloads.
+
+---
+
+### 📡 3. Multi-Layer Playout Routing & Protection
+- **Multi-Layer Matrix Badges**: Live visual indicators showing **ON AIR** state for **HEADLINES (L2)**, **ONELINER (L3)**, and **TWOLINER (L4)**.
+- **App-Scoped Clear Action**:
+  - **CLEAR APP LAYERS (L2, L3, L4)** stops and clears **ONLY** layers 2, 3, and 4 used by this client application.
+  - External channel media (video clips, channel logos, tickers on other layers) remain 100% active and untouched.
+
+---
+
+### 🎨 4. Broadcast Alpha Fill & Key HTML Templates
+- Fully transparent HTML alpha canvas (`1920x1080`) optimized for CasparCG SDI / NDI fill & key output.
+- Smooth CSS animations, clean typography, glassmorphism aesthetics, and native CasparCG HTML Template API (`window.play()`, `window.stop()`, `window.update()`).
+
+---
+
+## 🛠️ Hardware & Software Requirements
+
+- **Node.js**: v18.0 or higher
+- **CasparCG Server**: 2.3.x or 2.4.x (running HTML Producer enabled)
+- **MySQL Database**: v8.0 or MariaDB (Database: `nrcsnew`, Table: `Script`)
+
+---
+
+## 🚀 Quick Start Guide
+
+### 1. Clone & Install Dependencies
 ```bash
+git clone https://github.com/vimlesh1975/nhbs.git
+cd nhbs
 npm install
 ```
 
 ### 2. Configure Environment Variables (`.env.local`)
-Create `.env.local` or edit existing configuration:
+Create `.env.local` in the project root:
 ```env
-# CasparCG Server IP & AMCP TCP Port
+# CasparCG Server Configuration
 CASPARCG_HOST=127.0.0.1
 CASPARCG_PORT=5250
 
-# MySQL Database Settings
+# MySQL NRCS Database Credentials
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=root
-DB_NAME=casparcg_db
+DB_USER=itmaint
+DB_PASSWORD=itddkchn
+DB_NAME=nrcsnew
 ```
 
-### 3. Import MySQL Database Schema
-Run the provided `schema.sql` script in MySQL:
-```bash
-mysql -u root -p < schema.sql
+### 3. Database Schema Overview
+The system queries the `Script` table:
+```sql
+SELECT Script FROM Script 
+WHERE bulletinname = '0830' 
+  AND LOWER(SlugName) = LOWER('headlines') 
+  AND DATE(bulletindate) = '2026-08-22' 
+ORDER BY id DESC LIMIT 50;
+```
+For 2-line graphics, format text in MySQL with the `$$$$` delimiter:
+```
+Dr. Sarah Jenkins $$$$ Chief AI Scientist
 ```
 
-### 4. Start Next.js Client
+### 4. Start Next.js Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open **[http://localhost:3000](http://localhost:3000)** in your web browser.
 
 ---
 
-## 📺 Connecting to CasparCG Server
+## 📡 CasparCG AMCP Command Syntax Reference
 
-In CasparCG Server `casparcg.config`, add an HTML consumer or play templates directly via AMCP:
+This client communicates over TCP socket (`5250`) using standard AMCP commands:
 
-### Playing HTML Templates in CasparCG:
 ```amcp
-CG 1-1 ADD 1 "http://localhost:3000/templates/lower-third" 1 "{\"f0\":\"John Doe\",\"f1\":\"Presenter\"}"
-CG 1-1 PLAY 1
-CG 1-1 STOP 1
+# Headlines (Layer 2)
+CG 1-2 ADD 1 "http://127.0.0.1:3000/templates/lower-third?f0=Headline%20Text" 1 "{\"f0\":\"Headline Text\"}"
+CG 1-2 STOP 1
+
+# Oneliner (Layer 3)
+CG 1-3 ADD 1 "http://127.0.0.1:3000/templates/oneliner?f0=Oneliner%20Text" 1 "{\"f0\":\"Oneliner Text\"}"
+CG 1-3 STOP 1
+
+# Twoliner (Layer 4)
+CG 1-4 ADD 1 "http://127.0.0.1:3000/templates/twoliner?f0=Name&f1=Designation" 1 "{\"f0\":\"Name\",\"f1\":\"Designation\"}"
+CG 1-4 STOP 1
+
+# Real-Time Layer Mixer Positioning
+MIXER 1-2 FILL 0.05 0 0.9 0.9
+MIXER 1-2 CLEAR
 ```
 
-Or click the **PLAY ON AIR** button in the client interface to send the commands automatically!
+---
+
+## 📁 Repository Structure
+
+```
+nhbs/
+├── app/
+│   ├── api/
+│   │   ├── casparcg/        # AMCP TCP socket bridge route handler
+│   │   └── db/              # MySQL script and bulletin query APIs
+│   ├── templates/
+│   │   ├── lower-third/     # Headlines single-line overlay template
+│   │   ├── oneliner/        # Dark glassmorphism strip template
+│   │   └── twoliner/        # 2-line Name & Designation graphic template
+│   ├── globals.css          # Transparent html/body broadcast styles
+│   ├── layout.js            # Root layout
+│   └── page.js              # Master Playout Controller
+├── components/
+│   ├── ChannelMatrix.jsx    # Live ON AIR layer status badge matrix
+│   ├── DatabaseExplorer.jsx # 3-Column Newsroom Deck & Mixer controls
+│   ├── Header.jsx           # CasparCG TCP connection indicator
+│   └── AmcpConsole.jsx      # Real-time AMCP telemetry command log
+├── lib/
+│   ├── casparcg.js          # Net Socket TCP connection helper
+│   └── db.js                # mysql2 connection pool
+├── package.json
+└── README.md
+```
+
+---
+
+## 📜 License
+
+Distributed under the MIT License.
