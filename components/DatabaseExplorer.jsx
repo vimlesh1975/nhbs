@@ -307,13 +307,28 @@ export default function DatabaseExplorer({
               </div>
             </div>
 
-            <button
-              onClick={handleAddHeadline}
-              className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
-            >
-              <Plus className="w-3 h-3" />
-              <span>Add</span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              {/* Single STOP Button for Headlines Layer 2 */}
+              <button
+                onClick={() => {
+                  setActiveLineKey(null);
+                  if (onExecuteAction) onExecuteAction('STOP', '', null, 'lower-third', 2);
+                }}
+                className="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                title="Stop Layer 2 Headlines graphics"
+              >
+                <RadioIcon className="w-3 h-3" />
+                <span>STOP</span>
+              </button>
+
+              <button
+                onClick={handleAddHeadline}
+                className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+              >
+                <Plus className="w-3 h-3" />
+                <span>Add</span>
+              </button>
+            </div>
           </div>
 
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 2 */}
@@ -417,18 +432,6 @@ export default function DatabaseExplorer({
                         <Play className="w-3 h-3 fill-current" />
                         <span>PLAY</span>
                       </button>
-
-                      <button
-                        onClick={() => {
-                          setActiveLineKey(`headline-${idx}`);
-                          if (onExecuteAction) onExecuteAction('STOP', '', null, 'lower-third', 2);
-                        }}
-                        className="px-2 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px] flex items-center gap-0.5 transition-all shadow"
-                        title="Stop Layer 2 graphics"
-                      >
-                        <RadioIcon className="w-3 h-3" />
-                        <span>STOP</span>
-                      </button>
                     </div>
                   </div>
                 );
@@ -452,13 +455,28 @@ export default function DatabaseExplorer({
               </div>
             </div>
 
-            <button
-              onClick={handleAddOneliner}
-              className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
-            >
-              <Plus className="w-3 h-3" />
-              <span>Add</span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              {/* Single STOP Button for Oneliner Layer 3 */}
+              <button
+                onClick={() => {
+                  setActiveLineKey(null);
+                  if (onExecuteAction) onExecuteAction('STOP', '', null, 'oneliner', 3);
+                }}
+                className="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                title="Stop Layer 3 Oneliner graphics"
+              >
+                <RadioIcon className="w-3 h-3" />
+                <span>STOP</span>
+              </button>
+
+              <button
+                onClick={handleAddOneliner}
+                className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+              >
+                <Plus className="w-3 h-3" />
+                <span>Add</span>
+              </button>
+            </div>
           </div>
 
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 3 */}
@@ -562,18 +580,6 @@ export default function DatabaseExplorer({
                         <Play className="w-3 h-3 fill-current" />
                         <span>PLAY</span>
                       </button>
-
-                      <button
-                        onClick={() => {
-                          setActiveLineKey(`oneliner-${idx}`);
-                          if (onExecuteAction) onExecuteAction('STOP', '', null, 'oneliner', 3);
-                        }}
-                        className="px-2 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px] flex items-center gap-0.5 transition-all shadow"
-                        title="Stop Layer 3 graphics"
-                      >
-                        <RadioIcon className="w-3 h-3" />
-                        <span>STOP</span>
-                      </button>
                     </div>
                   </div>
                 );
@@ -597,13 +603,28 @@ export default function DatabaseExplorer({
               </div>
             </div>
 
-            <button
-              onClick={handleAddTwoliner}
-              className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
-            >
-              <Plus className="w-3 h-3" />
-              <span>Add</span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              {/* Single STOP Button for Twoliner Layer 4 */}
+              <button
+                onClick={() => {
+                  setActiveLineKey(null);
+                  if (onExecuteAction) onExecuteAction('STOP', '', null, 'twoliner', 4);
+                }}
+                className="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                title="Stop Layer 4 Twoliner graphics"
+              >
+                <RadioIcon className="w-3 h-3" />
+                <span>STOP</span>
+              </button>
+
+              <button
+                onClick={handleAddTwoliner}
+                className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+              >
+                <Plus className="w-3 h-3" />
+                <span>Add</span>
+              </button>
+            </div>
           </div>
 
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 4 */}
@@ -703,18 +724,6 @@ export default function DatabaseExplorer({
                         >
                           <Play className="w-3 h-3 fill-current" />
                           <span>PLAY</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setActiveLineKey(`twoliner-${idx}`);
-                            if (onExecuteAction) onExecuteAction('STOP', '', null, 'twoliner', 4);
-                          }}
-                          className="px-2 py-0.5 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px] flex items-center gap-0.5 transition-all shadow"
-                          title="Stop Layer 4 graphics"
-                        >
-                          <RadioIcon className="w-3 h-3" />
-                          <span>STOP</span>
                         </button>
                       </div>
                     </div>
