@@ -102,11 +102,11 @@ export default function TwolinerDataStripTemplate() {
           transform: transformVal,
           opacity: opacityVal,
           transition: animState === 'idle' ? 'none' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease',
-          boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85)',
-          background: 'linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.94) 100%)',
+          // boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85)',
+          background: 'linear-gradient(90deg, rgba(255, 255, 254, 0.96) 0%, rgba(253, 254, 255, 0.94) 100%)',
           backdropFilter: 'blur(16px)',
-          borderLeft: '6px solid #3b82f6',
-          borderRight: '6px solid #3b82f6',
+          borderLeft: '30px solid #f6603b',
+          borderRight: '30px solid #f6603b',
           borderRadius: '8px',
           padding: '16px 36px',
           display: 'flex',
@@ -114,16 +114,16 @@ export default function TwolinerDataStripTemplate() {
           justifyContent: 'center',
           gap: '4px',
           maxWidth: '1650px',
-          minWidth: '400px'
+          minWidth: '1650px'
         }}>
           {/* Line 1: Name */}
           <span style={{
-            color: '#ffffff',
-            fontSize: '34px',
-            fontWeight: '800',
+            color: '#05001d',
+            fontSize: '40px',
+            fontWeight: 'bolder',
             letterSpacing: '-0.3px',
             // lineHeight: 1.15,
-            textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)',
+            // textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis'
@@ -134,9 +134,9 @@ export default function TwolinerDataStripTemplate() {
           {/* Line 2: Designation */}
           {designationText && (
             <span style={{
-              color: '#f8eb38ff',
+              color: 'rgb(7, 2, 24)',
               fontSize: '30px',
-              fontWeight: '600',
+              fontWeight: 'bolder',
               letterSpacing: '0px',
               // lineHeight: 1.15,
               whiteSpace: 'nowrap',
