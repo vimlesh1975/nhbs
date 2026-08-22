@@ -104,7 +104,7 @@ export default function OnelinerDataStripTemplate() {
             fontWeight: '800',
             letterSpacing: '-0.3px',
             // lineHeight: 1.2,
-            textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)',
+            // textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis'
