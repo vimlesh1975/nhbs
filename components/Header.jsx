@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Radio, Database, Settings, Server, RefreshCw } from 'lucide-react';
+import { Radio, Database, Settings, Server, RefreshCw, FileCode } from 'lucide-react';
 
 export default function Header({ 
   casparConnected, 
@@ -10,7 +10,9 @@ export default function Header({
   casparHost, 
   setCasparHost, 
   casparPort, 
-  setCasparPort
+  setCasparPort,
+  useHtmlTemplates,
+  setUseHtmlTemplates
 }) {
   const [showConfig, setShowConfig] = useState(false);
 
@@ -33,8 +35,40 @@ export default function Header({
           </div>
         </div>
 
-        {/* Telemetry Status Badges */}
-        <div className="flex items-center gap-3">
+        {/* Telemetry Status Badges & Template Switch */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Template Format Mode Switch (React Route vs Static HTML File) */}
+          <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 p-1 rounded-lg shadow-inner">
+            <div className="flex items-center gap-1 px-1">
+              <FileCode className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="text-[10px] font-bold text-slate-300 font-mono uppercase">TEMPLATE MODE:</span>
+            </div>
+            
+            <button
+              onClick={() => setUseHtmlTemplates && setUseHtmlTemplates(false)}
+              className={`px-2.5 py-1 rounded text-[10px] font-extrabold transition-all border ${
+                !useHtmlTemplates 
+                  ? 'bg-blue-600 border-blue-400 text-white shadow' 
+                  : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+              }`}
+              title="Default: Next.js React Page Templates (/templates/oneliner)"
+            >
+              REACT (DEFAULT)
+            </button>
+
+            <button
+              onClick={() => setUseHtmlTemplates && setUseHtmlTemplates(true)}
+              className={`px-2.5 py-1 rounded text-[10px] font-extrabold transition-all border ${
+                useHtmlTemplates 
+                  ? 'bg-cyan-600 border-cyan-400 text-white shadow' 
+                  : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+              }`}
+              title="Static HTML File Templates (/templates/oneliner.html)"
+            >
+              HTML (.html FILE)
+            </button>
+          </div>
+
           {/* CasparCG Status Badge */}
           <div 
             onClick={onCheckCaspar}

@@ -13,6 +13,25 @@ export default function BroadcastDashboard() {
   const [casparConnected, setCasparConnected] = useState(false);
   const [dbStatus, setDbStatus] = useState({ connected: false, isMock: true });
 
+  // Template Format Mode: false = React template (default), true = static .html file
+  const [useHtmlTemplates, setUseHtmlTemplates] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('casparcg_use_html_templates');
+        return saved === 'true';
+      } catch (err) {}
+    }
+    return false; // Default: Next.js React Page template
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('casparcg_use_html_templates', useHtmlTemplates);
+      } catch (err) {}
+    }
+  }, [useHtmlTemplates]);
+
   // Global Date Selector State (Default Today's Date)
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
 
@@ -70,7 +89,13 @@ export default function BroadcastDashboard() {
   const handleExecuteAction = async (action, rawCmd = '', customPayload = null, customTemplate = null, customLayer = null) => {
     try {
       const dataToSend = customPayload || payloadData;
-      const templateToSend = customTemplate || selectedTemplate;
+      let templateToSend = customTemplate || selectedTemplate;
+
+      // Auto-append .html extension if HTML Template mode is enabled
+      if (useHtmlTemplates && templateToSend && !templateToSend.endsWith('.html') && !templateToSend.startsWith('http')) {
+        templateToSend = `${templateToSend}.html`;
+      }
+
       const targetLayer = customLayer !== null && customLayer !== undefined ? customLayer : layer;
 
       const res = await fetch('/api/casparcg/command', {
@@ -201,6 +226,8 @@ export default function BroadcastDashboard() {
         setCasparHost={setCasparHost}
         casparPort={casparPort}
         setCasparPort={setCasparPort}
+        useHtmlTemplates={useHtmlTemplates}
+        setUseHtmlTemplates={setUseHtmlTemplates}
       />
 
       {/* Main Studio Container */}

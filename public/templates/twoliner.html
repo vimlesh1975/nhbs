@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Twoliner Graphic Template</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; width: 1920px; height: 1080px;
+      background: transparent !important; overflow: hidden;
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    }
+    .twoliner-box {
+      position: absolute; top: 85%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+      background: linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.94) 100%);
+      border-left: 5px solid #3b82f6; border-right: 5px solid #3b82f6;
+      border-radius: 8px; padding: 12px 36px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+      max-width: 1650px; min-width: 400px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    }
+    .twoliner-box.on-air { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    .name-text { color: #ffffff; font-size: 34px; font-weight: 800; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7); white-space: nowrap; }
+    .deg-text { color: #f8eb38; font-size: 22px; font-weight: 600; white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <div id="graphic-container" class="twoliner-box">
+    <span id="f0" class="name-text"></span>
+    <span id="f1" class="deg-text"></span>
+  </div>
+
+  <script>
+    function play() {
+      document.getElementById('graphic-container').classList.add('on-air');
+    }
+    function stop() {
+      document.getElementById('graphic-container').classList.remove('on-air');
+    }
+    function update(str) {
+      try {
+        let data = (typeof str === 'string') ? JSON.parse(str) : str;
+        let nameVal = data.f0 || data.name || '';
+        let degVal = data.f1 || data.designation || '';
+        document.getElementById('f0').innerText = nameVal;
+        document.getElementById('f1').innerText = degVal;
+      } catch (err) { console.error('CasparCG update error:', err); }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('f0')) update({ f0: urlParams.get('f0'), f1: urlParams.get('f1') });
+    });
+  </script>
+</body>
+</html>
