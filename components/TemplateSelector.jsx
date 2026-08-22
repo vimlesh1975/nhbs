@@ -1,39 +1,31 @@
 'use client';
-import { Layout, Type, AlertTriangle, Trophy, Eye } from 'lucide-react';
+import { Layout, Type, Layers, Eye } from 'lucide-react';
 
 export default function TemplateSelector({ selectedTemplate, onSelectTemplate, onOpenPreviewModal }) {
   const templates = [
     {
-      id: 'lower-third',
-      name: 'Lower Third Glass',
-      desc: 'Standard Name & Title overlay for speakers & guests',
+      id: 'headlines',
+      name: 'Headlines Title Overlay',
+      desc: 'Centered headline title banner (Layer 2)',
       icon: Type,
-      color: 'from-blue-600 to-indigo-600',
-      url: '/templates/lower-third'
+      color: 'from-amber-500 to-orange-600',
+      url: '/templates/headlines'
     },
     {
-      id: 'ticker',
-      name: 'News Ticker Strip',
-      desc: 'Bottom scrolling headline banner with live time',
+      id: 'oneliner',
+      name: 'Oneliner Data Strip',
+      desc: 'Single line lower-third data strip (Layer 3)',
       icon: Layout,
-      color: 'from-red-600 to-rose-700',
-      url: '/templates/ticker'
+      color: 'from-cyan-600 to-blue-600',
+      url: '/templates/oneliner'
     },
     {
-      id: 'breaking-news',
-      name: 'Breaking News Alert',
-      desc: 'High priority flashing red alert banner',
-      icon: AlertTriangle,
-      color: 'from-amber-600 to-red-600',
-      url: '/templates/breaking-news'
-    },
-    {
-      id: 'scoreboard',
-      name: 'Sports Scoreboard',
-      desc: 'TV sports scorebug with team scores & game clock',
-      icon: Trophy,
-      color: 'from-emerald-600 to-teal-700',
-      url: '/templates/scoreboard'
+      id: 'twoliner',
+      name: 'Twoliner Data Strip',
+      desc: 'Two line name & designation overlay (Layer 4)',
+      icon: Layers,
+      color: 'from-blue-600 to-indigo-600',
+      url: '/templates/twoliner'
     }
   ];
 
@@ -57,7 +49,7 @@ export default function TemplateSelector({ selectedTemplate, onSelectTemplate, o
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {templates.map((tpl) => {
           const IconComponent = tpl.icon;
           const isSelected = selectedTemplate === tpl.id;

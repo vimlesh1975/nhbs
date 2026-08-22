@@ -29,7 +29,7 @@ export default function LivePreviewModal({ templateId, payloadData, onClose }) {
     }
   };
 
-  const templateUrl = `/templates/${templateId || 'lower-third'}`;
+  const templateUrl = `/templates/${templateId || 'headlines'}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">

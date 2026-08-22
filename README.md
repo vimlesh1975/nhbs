@@ -13,16 +13,16 @@ Built for television broadcast operators, newsroom directors, and MCR engineers,
 - **HEADLINES (Layer 2)**:
   - Queries records with `SlugName = 'headlines'`.
   - Routes playout directly to **Channel 1 — Layer 2 (`1-2`)**.
-  - Template: `http://127.0.0.1:3000/templates/lower-third` (Custom transparent overlay).
+  - Template: `http://127.0.0.1:22000/templates/headlines` (Custom transparent overlay).
 - **ONELINER (Layer 3)**:
   - Queries records with `SlugName = 'oneliner'`.
   - Routes playout directly to **Channel 1 — Layer 3 (`1-3`)**.
-  - Template: `http://127.0.0.1:3000/templates/oneliner` (Dark glassmorphism background strip bar).
+  - Template: `http://127.0.0.1:22000/templates/oneliner` (Dark glassmorphism background strip bar).
 - **TWOLINER (Layer 4)**:
   - Queries records with `SlugName = 'twoliner'`.
   - Automatically parses `Name $$$$ Designation` format into stacked Line 1 (Name) & Line 2 (Designation) editable fields.
   - Routes playout directly to **Channel 1 — Layer 4 (`1-4`)**.
-  - Template: `http://127.0.0.1:3000/templates/twoliner` (2-line animated lower third strip).
+  - Template: `http://127.0.0.1:22000/templates/twoliner` (2-line animated lower third strip).
 
 ---
 
@@ -105,7 +105,7 @@ Dr. Sarah Jenkins $$$$ Chief AI Scientist
 ```bash
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)** in your web browser.
+Open **[http://localhost:22000](http://localhost:22000)** in your web browser.
 
 ---
 
@@ -115,15 +115,15 @@ This client communicates over TCP socket (`5250`) using standard AMCP commands:
 
 ```amcp
 # Headlines (Layer 2)
-CG 1-2 ADD 1 "http://127.0.0.1:3000/templates/lower-third?f0=Headline%20Text" 1 "{\"f0\":\"Headline Text\"}"
+CG 1-2 ADD 1 "http://127.0.0.1:22000/templates/headlines?f0=Headline%20Text" 1 "{\"f0\":\"Headline Text\"}"
 CG 1-2 STOP 1
 
 # Oneliner (Layer 3)
-CG 1-3 ADD 1 "http://127.0.0.1:3000/templates/oneliner?f0=Oneliner%20Text" 1 "{\"f0\":\"Oneliner Text\"}"
+CG 1-3 ADD 1 "http://127.0.0.1:22000/templates/oneliner?f0=Oneliner%20Text" 1 "{\"f0\":\"Oneliner Text\"}"
 CG 1-3 STOP 1
 
 # Twoliner (Layer 4)
-CG 1-4 ADD 1 "http://127.0.0.1:3000/templates/twoliner?f0=Name&f1=Designation" 1 "{\"f0\":\"Name\",\"f1\":\"Designation\"}"
+CG 1-4 ADD 1 "http://127.0.0.1:22000/templates/twoliner?f0=Name&f1=Designation" 1 "{\"f0\":\"Name\",\"f1\":\"Designation\"}"
 CG 1-4 STOP 1
 
 # Real-Time Layer Mixer Positioning

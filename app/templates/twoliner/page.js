@@ -6,7 +6,7 @@ export default function TwolinerDataStripTemplate() {
     f0: '',
     f1: ''
   });
-  const [visible, setVisible] = useState(false);
+  const [animState, setAnimState] = useState('idle'); // 'idle' | 'onair' | 'exiting'
 
   useEffect(() => {
     // Read URL query parameters immediately on load
@@ -25,11 +25,14 @@ export default function TwolinerDataStripTemplate() {
 
     // Expose CasparCG Standard HTML Template API functions to window object
     window.play = function () {
-      setVisible(true);
+      setAnimState('idle');
+      setTimeout(() => {
+        setAnimState('onair');
+      }, 20);
     };
 
     window.stop = function () {
-      setVisible(false);
+      setAnimState('exiting');
     };
 
     window.update = function (str) {
@@ -56,7 +59,7 @@ export default function TwolinerDataStripTemplate() {
 
     // Reveal graphic on load
     const timer = setTimeout(() => {
-      setVisible(true);
+      setAnimState('onair');
     }, 100);
 
     return () => clearTimeout(timer);
@@ -71,6 +74,12 @@ export default function TwolinerDataStripTemplate() {
     const parts = nameText.split('$$$$');
     nameText = parts[0].trim();
     designationText = parts[1].trim();
+  }
+
+  let transformVal = 'translateX(calc(-100% - 150px))';
+  let opacityVal = animState === 'idle' ? 0 : 1;
+  if (animState === 'onair') {
+    transformVal = 'translateX(0px)';
   }
 
   return (
@@ -90,9 +99,9 @@ export default function TwolinerDataStripTemplate() {
           position: 'absolute',
           bottom: '75px',
           left: '80px',
-          transform: visible ? 'translateX(0px)' : 'translateX(-1500px)',
-          opacity: visible ? 1 : 0,
-          transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease',
+          transform: transformVal,
+          opacity: opacityVal,
+          transition: animState === 'idle' ? 'none' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease',
           boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85)',
           background: 'linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.94) 100%)',
           backdropFilter: 'blur(16px)',
@@ -126,7 +135,7 @@ export default function TwolinerDataStripTemplate() {
           {designationText && (
             <span style={{
               color: '#f8eb38ff',
-              fontSize: '22px',
+              fontSize: '30px',
               fontWeight: '600',
               letterSpacing: '0px',
               // lineHeight: 1.15,

@@ -21,7 +21,7 @@ export default function PlayoutController({
   };
 
   // Construct Next.js host URL for CasparCG HTML producer
-  const templateUrl = `http://${casparHost || '127.0.0.1'}:3000/templates/${selectedTemplate}`;
+  const templateUrl = `http://${casparHost || '127.0.0.1'}:22000/templates/${selectedTemplate}`;
 
   return (
     <div className="glass-panel p-5 mb-6 border-l-4 border-l-blue-500">

@@ -7,28 +7,31 @@ export default function OnelinerDataStripTemplate() {
     headline: '',
     text: ''
   });
-  const [visible, setVisible] = useState(false);
+  const [animState, setAnimState] = useState('idle'); // 'idle' | 'onair' | 'exiting'
 
   useEffect(() => {
     // Read URL query parameters immediately on load
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
-      const f0Param = urlParams.get('f0') || urlParams.get('headline') || urlParams.get('text');
+      const f0Param = urlParams.get('ccgf0') || urlParams.get('f0') || urlParams.get('headline') || urlParams.get('text');
       if (f0Param) {
-        setData(prev => ({ ...prev, f0: f0Param }));
+        setData(prev => ({ ...prev, f0: f0Param, ccgf0: f0Param }));
       }
     }
 
     // Expose CasparCG Standard HTML Template API functions to window object
-    window.play = function() {
-      setVisible(true);
+    window.play = function () {
+      setAnimState('idle');
+      setTimeout(() => {
+        setAnimState('onair');
+      }, 20);
     };
 
-    window.stop = function() {
-      setVisible(false);
+    window.stop = function () {
+      setAnimState('exiting');
     };
 
-    window.update = function(str) {
+    window.update = function (str) {
       try {
         let parsed = str;
         if (typeof str === 'string') {
@@ -36,7 +39,7 @@ export default function OnelinerDataStripTemplate() {
           if (trimmed.startsWith('{')) {
             parsed = JSON.parse(trimmed);
           } else {
-            parsed = { f0: str };
+            parsed = { f0: str, ccgf0: str };
           }
         }
         setData(prev => ({ ...prev, ...parsed }));
@@ -47,13 +50,19 @@ export default function OnelinerDataStripTemplate() {
 
     // Reveal graphic on load
     const timer = setTimeout(() => {
-      setVisible(true);
+      setAnimState('onair');
     }, 100);
 
     return () => clearTimeout(timer);
   }, []);
 
-  const displayText = data.f0 || data.headline || data.script || data.text || '';
+  const displayText = data.ccgf0 || data.f0 || data.headline || data.script || data.text || '';
+
+  let transformVal = 'translateX(calc(-100% - 150px))';
+  let opacityVal = animState === 'idle' ? 0 : 1;
+  if (animState === 'onair') {
+    transformVal = 'translateX(0px)';
+  }
 
   return (
     <div style={{
@@ -72,9 +81,9 @@ export default function OnelinerDataStripTemplate() {
           position: 'absolute',
           bottom: '75px',
           left: '80px',
-          transform: visible ? 'translateX(0px)' : 'translateX(-1500px)',
-          opacity: visible ? 1 : 0,
-          transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease',
+          transform: transformVal,
+          opacity: opacityVal,
+          transition: animState === 'idle' ? 'none' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease',
           boxShadow: '0 20px 45px rgba(0, 0, 0, 0.8)',
           background: 'linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.94) 100%)',
           backdropFilter: 'blur(16px)',
@@ -92,7 +101,7 @@ export default function OnelinerDataStripTemplate() {
             fontSize: '34px',
             fontWeight: '800',
             letterSpacing: '-0.3px',
-            lineHeight: 1.2,
+            // lineHeight: 1.2,
             textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)',
             whiteSpace: 'nowrap',
             overflow: 'hidden',

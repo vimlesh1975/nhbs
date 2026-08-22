@@ -199,7 +199,7 @@ export default function DatabaseExplorer({
     setActiveLineKey(lineKey);
 
     let linePayload = { f0: lineText };
-    let targetTemplate = 'lower-third';
+    let targetTemplate = 'headlines';
     let targetLayer = 2; // Layer 2 for Headlines
 
     if (type === 'oneliner') {
@@ -312,7 +312,7 @@ export default function DatabaseExplorer({
               <button
                 onClick={() => {
                   setActiveLineKey(null);
-                  if (onExecuteAction) onExecuteAction('STOP', '', null, 'lower-third', 2);
+                  if (onExecuteAction) onExecuteAction('STOP', '', null, 'headlines', 2);
                 }}
                 className="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
                 title="Stop Layer 2 Headlines graphics"

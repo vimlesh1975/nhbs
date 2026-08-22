@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { checkCasparCgStatus } from '../../../../lib/casparcg';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);

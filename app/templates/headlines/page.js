@@ -5,7 +5,7 @@ export default function PureTextCenteredTemplate() {
   const [data, setData] = useState({
     f0: ''
   });
-  const [visible, setVisible] = useState(false);
+  const [animState, setAnimState] = useState('idle'); // 'idle' | 'onair' | 'exiting'
 
   useEffect(() => {
     // Read URL query parameters immediately on load
@@ -19,11 +19,14 @@ export default function PureTextCenteredTemplate() {
 
     // Expose CasparCG Standard HTML Template API functions to window object
     window.play = function () {
-      setVisible(true);
+      setAnimState('idle');
+      setTimeout(() => {
+        setAnimState('onair');
+      }, 20);
     };
 
     window.stop = function () {
-      setVisible(false);
+      setAnimState('exiting');
     };
 
     window.update = function (str) {
@@ -45,13 +48,19 @@ export default function PureTextCenteredTemplate() {
 
     // Reveal graphic on load
     const timer = setTimeout(() => {
-      setVisible(true);
+      setAnimState('onair');
     }, 100);
 
     return () => clearTimeout(timer);
   }, []);
 
   const displayText = data.f0 || data.headline || data.script || data.text || '';
+
+  let transformVal = 'translate(calc(-50% - 100vw), -50%)';
+  let opacityVal = animState === 'idle' ? 0 : 1;
+  if (animState === 'onair') {
+    transformVal = 'translate(-50%, -50%)';
+  }
 
   return (
     <div style={{
@@ -70,9 +79,9 @@ export default function PureTextCenteredTemplate() {
           position: 'absolute',
           top: '82%',
           left: '46%',
-          transform: visible ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.85)',
-          opacity: visible ? 1 : 0,
-          transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease',
+          transform: transformVal,
+          opacity: opacityVal,
+          transition: animState === 'idle' ? 'none' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease',
           textAlign: 'center',
           maxWidth: '1850px',
           display: 'flex',

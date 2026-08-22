@@ -13,32 +13,13 @@ export default function BroadcastDashboard() {
   const [casparConnected, setCasparConnected] = useState(false);
   const [dbStatus, setDbStatus] = useState({ connected: false, isMock: true });
 
-  // Template Format Mode: false = React template (default), true = static .html file
-  const [useHtmlTemplates, setUseHtmlTemplates] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('casparcg_use_html_templates');
-        return saved === 'true';
-      } catch (err) {}
-    }
-    return false; // Default: Next.js React Page template
-  });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem('casparcg_use_html_templates', useHtmlTemplates);
-      } catch (err) {}
-    }
-  }, [useHtmlTemplates]);
-
   // Global Date Selector State (Default Today's Date)
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
 
   // Playout Routing
   const [channel, setChannel] = useState(1);
   const [layer, setLayer] = useState(2);
-  const [selectedTemplate, setSelectedTemplate] = useState('lower-third');
+  const [selectedTemplate, setSelectedTemplate] = useState('headlines');
   const [activeRecordId, setActiveRecordId] = useState(null);
 
   // Graphics Payload Data (mapped dynamically from active user script line)
@@ -91,12 +72,29 @@ export default function BroadcastDashboard() {
       const dataToSend = customPayload || payloadData;
       let templateToSend = customTemplate || selectedTemplate;
 
-      // Auto-append .html extension if HTML Template mode is enabled
-      if (useHtmlTemplates && templateToSend && !templateToSend.endsWith('.html') && !templateToSend.startsWith('http')) {
-        templateToSend = `${templateToSend}.html`;
+      const targetLayer = customLayer !== null && customLayer !== undefined ? customLayer : layer;
+
+      // Retrieve layer mixer position from localStorage if available
+      let layerMixer = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+      if (typeof window !== 'undefined') {
+        try {
+          const savedMixer = localStorage.getItem('casparcg_mixer_pos');
+          if (savedMixer) {
+            const parsed = JSON.parse(savedMixer);
+            if (parsed && parsed[targetLayer]) {
+              layerMixer = parsed[targetLayer];
+            }
+          }
+        } catch (e) {}
       }
 
-      const targetLayer = customLayer !== null && customLayer !== undefined ? customLayer : layer;
+      const mergedTemplateData = {
+        x: layerMixer.x ?? 0,
+        y: layerMixer.y ?? 0,
+        scaleX: layerMixer.scaleX ?? 1,
+        scaleY: layerMixer.scaleY ?? 1,
+        ...dataToSend
+      };
 
       const res = await fetch('/api/casparcg/command', {
         method: 'POST',
@@ -106,7 +104,7 @@ export default function BroadcastDashboard() {
           channel,
           layer: targetLayer,
           templateName: templateToSend,
-          templateData: dataToSend,
+          templateData: mergedTemplateData,
           rawCommand: rawCmd,
           host: casparHost,
           port: casparPort
@@ -148,44 +146,26 @@ export default function BroadcastDashboard() {
 
     // Auto-switch template preset depending on table type
     if (tableName === 'headlines') {
+      setSelectedTemplate('headlines');
       setPayloadData({
         headline: activeText,
         f0: activeText,
         f1: record.category || 'HEADLINE',
         category: record.category || 'NEWS'
       });
-    } else if (tableName === 'lower_thirds') {
-      setSelectedTemplate('lower-third');
+    } else if (tableName === 'oneliner') {
+      setSelectedTemplate('oneliner');
+      setPayloadData({
+        headline: activeText,
+        f0: activeText,
+        category: record.category || 'ONELINER'
+      });
+    } else if (tableName === 'twoliner') {
+      setSelectedTemplate('twoliner');
       setPayloadData({
         f0: activeText || record.name || '',
-        f1: record.title || '',
-        f2: record.subtitle || '',
-        category: record.category || 'NEWS'
-      });
-    } else if (tableName === 'news_tickers') {
-      setSelectedTemplate('ticker');
-      setPayloadData({
-        headline: activeText,
-        category: record.category || 'TICKER',
-        priority: record.priority || 'NORMAL'
-      });
-    } else if (tableName === 'breaking_news') {
-      setSelectedTemplate('breaking-news');
-      setPayloadData({
-        badge: record.badge || 'BREAKING NEWS',
-        headline: activeText,
-        location: record.location || '',
-        reporter: record.reporter || ''
-      });
-    } else if (tableName === 'scoreboards') {
-      setSelectedTemplate('scoreboard');
-      setPayloadData({
-        match_name: record.match_name || 'SPORTS',
-        team_a: record.team_a || 'TEAM 1',
-        score_a: record.score_a || '0',
-        team_b: record.team_b || 'TEAM 2',
-        score_b: record.score_b || '0',
-        status: record.status || 'LIVE'
+        f1: record.title || record.designation || '',
+        category: record.category || 'TWOLINER'
       });
     } else {
       // Arbitrary user custom table
@@ -226,8 +206,6 @@ export default function BroadcastDashboard() {
         setCasparHost={setCasparHost}
         casparPort={casparPort}
         setCasparPort={setCasparPort}
-        useHtmlTemplates={useHtmlTemplates}
-        setUseHtmlTemplates={setUseHtmlTemplates}
       />
 
       {/* Main Studio Container */}
