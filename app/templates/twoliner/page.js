@@ -97,8 +97,8 @@ export default function TwolinerDataStripTemplate() {
       {nameText && (
         <div style={{
           position: 'absolute',
-          bottom: '75px',
-          left: '80px',
+          bottom: '175px',
+          left: '100px',
           transform: transformVal,
           opacity: opacityVal,
           transition: animState === 'idle' ? 'none' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease',
