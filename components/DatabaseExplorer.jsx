@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Calendar, Radio, FileCode, Play, Plus, Radio as RadioIcon, Sliders } from 'lucide-react';
+import { Calendar, Radio, FileCode, Play, Plus, Radio as RadioIcon, Sliders, RefreshCw } from 'lucide-react';
 
 export default function DatabaseExplorer({ 
   onSelectDataRecord, 
@@ -287,6 +287,16 @@ export default function DatabaseExplorer({
               </option>
             ))}
           </select>
+          <button
+            type="button"
+            onClick={fetchScripts}
+            disabled={loading || !selectedDate || !selectedBulletin}
+            className="mt-2 w-full px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow"
+            title="Refresh scripts for the selected date and bulletin"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <span>{loading ? 'Refreshing...' : 'Refresh Scripts'}</span>
+          </button>
         </div>
       </div>
 
