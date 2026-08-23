@@ -14,7 +14,7 @@ export default function TemplateSelector({ selectedTemplate, onSelectTemplate, o
     {
       id: 'oneliner',
       name: 'Oneliner Data Strip',
-      desc: 'Single line lower-third data strip (Layer 3)',
+      desc: 'Single line lower-third data strip (Layer 2)',
       icon: Layout,
       color: 'from-cyan-600 to-blue-600',
       url: '/templates/oneliner'
@@ -22,7 +22,7 @@ export default function TemplateSelector({ selectedTemplate, onSelectTemplate, o
     {
       id: 'twoliner',
       name: 'Twoliner Data Strip',
-      desc: 'Two line name & designation overlay (Layer 4)',
+      desc: 'Two line name & designation overlay (Layer 2)',
       icon: Layers,
       color: 'from-blue-600 to-indigo-600',
       url: '/templates/twoliner'

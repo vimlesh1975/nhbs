@@ -12,9 +12,10 @@ Built for television broadcast operators, newsroom directors, and MCR engineers,
 
 ### 🎛️ 1. Master Top Row Control Bar
 - **Leftmost Broadcast Date & News Bulletin Selectors**: Instant date selection and bulletin dropdown with a real-time **Refresh** button.
-- **Interactive Channel Number Switcher (`CH 1` / `CH 2`)**: Toggle between playout channels on the fly with live dynamic protocol routing updates (`1-2`, `1-3`, `1-4` or `2-2`, `2-3`, `2-4`).
-- **Live On-Air Layer Badges**: Active pulse indicators for **HEADLINES (L2)**, **ONELINER (L3)**, and **TWOLINER (L4)**.
-- **App-Scoped Layer Clear (`CLEAR LAYERS`)**: Stops and clears **only** layers 2, 3, and 4 on the selected channel, leaving other channel media (video clips, station bugs, tickers) completely untouched.
+- **Interactive Channel Number Switcher (`CH 1` / `CH 2`)**: Toggle between playout channels on the fly with live dynamic protocol routing updates (`1-2` or `2-2`).
+- **Live On-Air Layer 2 Badge**: Active pulse indicator for **ON AIR (L2)** / **STANDBY (L2)**.
+- **Single Master STOP Button**: Centrally located master STOP button to instantly take off any graphics on Layer 2.
+- **Layer Clear (`CLEAR L2`)**: Stops and clears Layer 2 on the selected channel, leaving other channel media completely untouched.
 - **Server Telemetry Badges**: Real-time heartbeat indicators for CasparCG Server TCP socket (`5250 LIVE` / `SIMULATION`) and MySQL Database connection (`MySQL LIVE` / `MySQL OFF`).
 - **Animated Dark / Light Mode Switcher**: Smooth theme transitions with zero-flash pre-hydration.
 
@@ -26,20 +27,20 @@ Built for television broadcast operators, newsroom directors, and MCR engineers,
   - Queries records with `SlugName = 'headlines'`.
   - Routes playout directly to **Channel X — Layer 2 (`X-2`)**.
   - Template: `http://127.0.0.1:22000/templates/headlines` (Custom transparent overlay).
-- **ONELINER (Layer 3)**:
+- **ONELINER (Layer 2)**:
   - Queries records with `SlugName = 'oneliner'`.
-  - Routes playout directly to **Channel X — Layer 3 (`X-3`)**.
+  - Routes playout directly to **Channel X — Layer 2 (`X-2`)**.
   - Template: `http://127.0.0.1:22000/templates/oneliner` (Dark glassmorphism background strip bar).
-- **TWOLINER (Layer 4)**:
+- **TWOLINER (Layer 2)**:
   - Queries records with `SlugName = 'twoliner'`.
   - Automatically parses `Name $$$$ Designation` format into stacked Line 1 (Name) & Line 2 (Designation) editable fields.
-  - Routes playout directly to **Channel X — Layer 4 (`X-4`)**.
+  - Routes playout directly to **Channel X — Layer 2 (`X-2`)**.
   - Template: `http://127.0.0.1:22000/templates/twoliner` (2-line animated lower third strip).
 
 ---
 
 ### 📐 3. Real-Time Live AMCP Mixer Controls
-- **4-DOF Layer Manipulation** for Layer 2, Layer 3, and Layer 4:
+- **4-DOF Layer Manipulation** for Layer 2:
   - **X**: Horizontal position offset (`0.01` step).
   - **Y**: Vertical position offset (`0.01` step).
   - **SX**: Horizontal Scale Factor (`0.05` step, default `1.0`).
@@ -48,7 +49,7 @@ Built for television broadcast operators, newsroom directors, and MCR engineers,
   ```amcp
   MIXER 1-2 FILL 0.05 -0.02 0.95 0.95
   ```
-- **RST Button**: Instantly resets positioning and issues `MIXER X-Y CLEAR`.
+- **RST Button**: Instantly resets positioning and issues `MIXER X-2 CLEAR`.
 
 ---
 

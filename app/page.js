@@ -256,17 +256,11 @@ export default function BroadcastDashboard() {
 
   const handleClearChannel = async (chNum = 1) => {
     const targetChannel = chNum || channel;
-    const appLayers = [2, 3, 4]; // Only layers used in this app (Headlines L2, Oneliner L3, Twoliner L4)
-
-    for (const l of appLayers) {
-      await handleExecuteAction('STOP', `CG ${targetChannel}-${l} STOP 1`, null, null, l);
-      await handleExecuteAction('CLEAR', `CLEAR ${targetChannel}-${l}`, null, null, l);
-    }
+    await handleExecuteAction('STOP', `CG ${targetChannel}-2 STOP 1`, null, null, 2);
+    await handleExecuteAction('CLEAR', `CLEAR ${targetChannel}-2`, null, null, 2);
 
     setActiveLayers({
-      [`${targetChannel}-2`]: false,
-      [`${targetChannel}-3`]: false,
-      [`${targetChannel}-4`]: false
+      [`${targetChannel}-2`]: false
     });
   };
 

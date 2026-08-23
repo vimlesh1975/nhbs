@@ -2,9 +2,11 @@ module.exports = {
   apps: [
     {
       name: 'nhbs-studio',
-      script: 'node_modules/next/dist/bin/next',
-      args: 'dev -p 22000',
+      script: 'server.js',
       cwd: __dirname,
+      interpreter: 'node',
+      windowsHide: true,
+      exec_mode: 'fork',
       instances: 1,
       autorestart: true,
       watch: false,
