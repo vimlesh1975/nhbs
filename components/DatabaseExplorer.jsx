@@ -34,9 +34,11 @@ export default function DatabaseExplorer({
 
   const [mounted, setMounted] = useState(false);
 
-  // Unified Mixer Position & Scale State for Layer 2
+  // Individual Mixer Position & Scale States for Headlines, Oneliner, and Twoliner
   const [mixerPos, setMixerPos] = useState({
-    2: { x: 0, y: 0, scaleX: 1, scaleY: 1 }
+    headlines: { x: 0, y: 0, scaleX: 1, scaleY: 1 },
+    oneliner: { x: 0, y: 0, scaleX: 1, scaleY: 1 },
+    twoliner: { x: 0, y: 0, scaleX: 1, scaleY: 1 }
   });
 
   // Restore mixer position safely after client mount
@@ -46,11 +48,11 @@ export default function DatabaseExplorer({
       const saved = localStorage.getItem('casparcg_mixer_pos');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed[2]) {
-          setMixerPos({ 2: parsed[2] });
-        } else if (parsed[1]) {
-          setMixerPos({ 2: parsed[1] });
-        }
+        setMixerPos({
+          headlines: parsed.headlines || parsed[2] || { x: 0, y: 0, scaleX: 1, scaleY: 1 },
+          oneliner: parsed.oneliner || parsed[3] || { x: 0, y: 0, scaleX: 1, scaleY: 1 },
+          twoliner: parsed.twoliner || parsed[4] || { x: 0, y: 0, scaleX: 1, scaleY: 1 }
+        });
       }
     } catch (err) {}
   }, []);
@@ -164,32 +166,46 @@ export default function DatabaseExplorer({
     setTwolinerLines(prev => [...prev, { name: DEFAULT_SAMPLE_TEXT, designation: DEFAULT_SAMPLE_TEXT }]);
   };
 
-  // Mixer X, Y, ScaleX, and ScaleY Handlers for Layer 2 - Auto-sends LIVE while changing
-  const handleMixerPosChange = (field, val) => {
+  // Individual Mixer Handler for Headlines, Oneliner, and Twoliner
+  const handleMixerPosChange = (type, field, val) => {
     const defaultVal = (field === 'scaleX' || field === 'scaleY') ? 1 : 0;
     const numVal = val !== '' ? (parseFloat(val) || defaultVal) : defaultVal;
-    const currentPos = mixerPos[2] || { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+    const currentPos = mixerPos[type] || { x: 0, y: 0, scaleX: 1, scaleY: 1 };
 
     const updatedX = field === 'x' ? numVal : currentPos.x;
     const updatedY = field === 'y' ? numVal : currentPos.y;
     const updatedScaleX = field === 'scaleX' ? numVal : (currentPos.scaleX ?? 1);
     const updatedScaleY = field === 'scaleY' ? numVal : (currentPos.scaleY ?? 1);
 
-    setMixerPos({
-      2: { x: updatedX, y: updatedY, scaleX: updatedScaleX, scaleY: updatedScaleY }
-    });
+    const updatedPos = {
+      ...mixerPos,
+      [type]: { x: updatedX, y: updatedY, scaleX: updatedScaleX, scaleY: updatedScaleY }
+    };
+    setMixerPos(updatedPos);
 
+    // Live send to CasparCG Layer 2
     const rawMixerCmd = `MIXER 1-2 FILL ${updatedX} ${updatedY} ${updatedScaleX} ${updatedScaleY}`;
     if (onExecuteAction) {
-      onExecuteAction('MIXER_FILL', rawMixerCmd, { x: updatedX, y: updatedY, width: updatedScaleX, height: updatedScaleY }, null, 2);
+      onExecuteAction(
+        'MIXER_FILL',
+        rawMixerCmd,
+        { x: updatedX, y: updatedY, scaleX: updatedScaleX, scaleY: updatedScaleY, width: updatedScaleX, height: updatedScaleY },
+        type,
+        2
+      );
     }
   };
 
-  const handleResetMixer = () => {
-    setMixerPos({ 2: { x: 0, y: 0, scaleX: 1, scaleY: 1 } });
+  const handleResetMixer = (type) => {
+    const updatedPos = {
+      ...mixerPos,
+      [type]: { x: 0, y: 0, scaleX: 1, scaleY: 1 }
+    };
+    setMixerPos(updatedPos);
+
     const rawClearCmd = `MIXER 1-2 CLEAR`;
     if (onExecuteAction) {
-      onExecuteAction('MIXER_CLEAR', rawClearCmd, {}, null, 2);
+      onExecuteAction('MIXER_CLEAR', rawClearCmd, { x: 0, y: 0, scaleX: 1, scaleY: 1 }, type, 2);
     }
   };
 
@@ -201,12 +217,19 @@ export default function DatabaseExplorer({
     }
   };
 
-  // Play Headlines on Layer 2
+  // Play Headlines on Layer 2 using individual Headlines mixer
   const handlePlayHeadline = (lineText, index) => {
     const lineKey = `headline-${index}`;
     setActiveLineKey(lineKey);
 
-    const linePayload = { f0: lineText || DEFAULT_SAMPLE_TEXT };
+    const pos = mixerPos.headlines || { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+    const linePayload = {
+      f0: lineText || DEFAULT_SAMPLE_TEXT,
+      x: pos.x,
+      y: pos.y,
+      scaleX: pos.scaleX,
+      scaleY: pos.scaleY
+    };
 
     if (onSelectDataRecord) {
       onSelectDataRecord('headlines', linePayload, lineText || DEFAULT_SAMPLE_TEXT, lineKey);
@@ -216,12 +239,19 @@ export default function DatabaseExplorer({
     }
   };
 
-  // Play Oneliner on Layer 2
+  // Play Oneliner on Layer 2 using individual Oneliner mixer
   const handlePlayOneliner = (lineText, index) => {
     const lineKey = `oneliner-${index}`;
     setActiveLineKey(lineKey);
 
-    const linePayload = { f0: lineText || DEFAULT_SAMPLE_TEXT };
+    const pos = mixerPos.oneliner || { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+    const linePayload = {
+      f0: lineText || DEFAULT_SAMPLE_TEXT,
+      x: pos.x,
+      y: pos.y,
+      scaleX: pos.scaleX,
+      scaleY: pos.scaleY
+    };
 
     if (onSelectDataRecord) {
       onSelectDataRecord('oneliner', linePayload, lineText || DEFAULT_SAMPLE_TEXT, lineKey);
@@ -231,14 +261,19 @@ export default function DatabaseExplorer({
     }
   };
 
-  // Play 2-line Twoliner row (Name & Designation) on Layer 2
+  // Play 2-line Twoliner row (Name & Designation) on Layer 2 using individual Twoliner mixer
   const handlePlayTwolinerRow = (item, index) => {
     const lineKey = `twoliner-${index}`;
     setActiveLineKey(lineKey);
 
+    const pos = mixerPos.twoliner || { x: 0, y: 0, scaleX: 1, scaleY: 1 };
     const linePayload = {
       f0: item.name || DEFAULT_SAMPLE_TEXT,
-      f1: item.designation || DEFAULT_SAMPLE_TEXT
+      f1: item.designation || DEFAULT_SAMPLE_TEXT,
+      x: pos.x,
+      y: pos.y,
+      scaleX: pos.scaleX,
+      scaleY: pos.scaleY
     };
 
     if (onSelectDataRecord) {
@@ -252,21 +287,24 @@ export default function DatabaseExplorer({
   return (
     <div className="glass-panel p-5 mb-6 border-l-4 border-l-cyan-400 bg-white/90 dark:bg-slate-950/80 transition-colors duration-200">
       
-      {/* UNIFIED MASTER TOP CONTROL BAR: SINGLE STOP BUTTON + LAYER 2 MIXER */}
+      {/* MASTER TOP CONTROL BAR: LAYER 2 BADGE & SINGLE MASTER STOP BUTTON */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4 p-3 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-sm">
         
-        {/* Left: Layer 2 Badge & Single Master STOP Button */}
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 bg-blue-600 text-white text-[11px] font-black font-mono rounded shadow-xs">
-              LAYER 2
-            </span>
-            <span className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider hidden sm:inline">
-              Broadcast Board
-            </span>
-          </div>
+        {/* Left: Layer 2 Routing Info */}
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-0.5 bg-blue-600 text-white text-[11px] font-black font-mono rounded shadow-xs">
+            LAYER 2
+          </span>
+          <span className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+            Broadcast Graphics Deck
+          </span>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 ml-2 hidden md:inline font-mono">
+            (Individual AMCP Mixers for Headlines, Oneliner & Twoliner)
+          </span>
+        </div>
 
-          {/* SINGLE MASTER STOP BUTTON */}
+        {/* Right: SINGLE MASTER STOP BUTTON */}
+        <div>
           <button
             onClick={handleStopGraphic}
             className="px-4 py-2 bg-rose-600 hover:bg-rose-500 active:scale-95 text-white text-xs font-black rounded-lg flex items-center gap-2 transition-all shadow-md shadow-rose-600/30 ring-1 ring-rose-400 cursor-pointer"
@@ -276,72 +314,11 @@ export default function DatabaseExplorer({
             <span>STOP GRAPHIC</span>
           </button>
         </div>
-
-        {/* Right: LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) CONTROLS FOR LAYER 2 */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1">
-            <Sliders className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-            <span className="text-xs font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER (L2):</span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-1.5">
-            <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
-              <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
-              <input
-                type="number"
-                step="0.01"
-                value={mixerPos[2]?.x ?? 0}
-                onChange={(e) => handleMixerPosChange('x', e.target.value)}
-                className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
-              />
-            </div>
-
-            <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
-              <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
-              <input
-                type="number"
-                step="0.01"
-                value={mixerPos[2]?.y ?? 0}
-                onChange={(e) => handleMixerPosChange('y', e.target.value)}
-                className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
-              />
-            </div>
-
-            <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
-              <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
-              <input
-                type="number"
-                step="0.05"
-                value={mixerPos[2]?.scaleX ?? 1}
-                onChange={(e) => handleMixerPosChange('scaleX', e.target.value)}
-                className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
-              />
-            </div>
-
-            <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
-              <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
-              <input
-                type="number"
-                step="0.05"
-                value={mixerPos[2]?.scaleY ?? 1}
-                onChange={(e) => handleMixerPosChange('scaleY', e.target.value)}
-                className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
-              />
-            </div>
-
-            <button
-              onClick={handleResetMixer}
-              className="px-2.5 py-1 rounded-md bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[10px] transition-all cursor-pointer shadow-xs"
-              title="Reset MIXER 1-2 CLEAR"
-            >
-              RST
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* 3-COLUMN SIDE-BY-SIDE GRID: HEADLINES | ONELINER | TWOLINER */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
         {/* COLUMN 1: HEADLINES (LAYER 2) */}
         <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
@@ -364,6 +341,69 @@ export default function DatabaseExplorer({
               <Plus className="w-3.5 h-3.5" />
               <span>Add</span>
             </button>
+          </div>
+
+          {/* INDIVIDUAL WIDE MIXER CONTROLS FOR HEADLINES */}
+          <div className="bg-slate-100 dark:bg-slate-900/80 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 shadow-xs">
+            <div className="flex items-center justify-between gap-1 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800/80">
+              <div className="flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 font-mono uppercase">Mixer Controls:</span>
+              </div>
+              <button
+                onClick={() => handleResetMixer('headlines')}
+                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[10px] transition-all cursor-pointer shadow-xs"
+                title="Reset Headlines MIXER 1-2 CLEAR"
+              >
+                RST
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">X:</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={mixerPos.headlines?.x ?? 0}
+                  onChange={(e) => handleMixerPosChange('headlines', 'x', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Y:</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={mixerPos.headlines?.y ?? 0}
+                  onChange={(e) => handleMixerPosChange('headlines', 'y', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SX:</span>
+                <input
+                  type="number"
+                  step="0.05"
+                  value={mixerPos.headlines?.scaleX ?? 1}
+                  onChange={(e) => handleMixerPosChange('headlines', 'scaleX', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SY:</span>
+                <input
+                  type="number"
+                  step="0.05"
+                  value={mixerPos.headlines?.scaleY ?? 1}
+                  onChange={(e) => handleMixerPosChange('headlines', 'scaleY', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+            </div>
           </div>
 
           {loading ? (
@@ -399,7 +439,7 @@ export default function DatabaseExplorer({
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handlePlayHeadline(lineText, idx)}
-                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow"
+                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow cursor-pointer"
                         title={`Play Headline Line ${idx + 1} on Layer 2`}
                       >
                         <Play className="w-3.5 h-3.5 fill-current" />
@@ -437,6 +477,69 @@ export default function DatabaseExplorer({
             </button>
           </div>
 
+          {/* INDIVIDUAL WIDE MIXER CONTROLS FOR ONELINER */}
+          <div className="bg-slate-100 dark:bg-slate-900/80 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 shadow-xs">
+            <div className="flex items-center justify-between gap-1 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800/80">
+              <div className="flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 font-mono uppercase">Mixer Controls:</span>
+              </div>
+              <button
+                onClick={() => handleResetMixer('oneliner')}
+                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[10px] transition-all cursor-pointer shadow-xs"
+                title="Reset Oneliner MIXER 1-2 CLEAR"
+              >
+                RST
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">X:</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={mixerPos.oneliner?.x ?? 0}
+                  onChange={(e) => handleMixerPosChange('oneliner', 'x', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Y:</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={mixerPos.oneliner?.y ?? 0}
+                  onChange={(e) => handleMixerPosChange('oneliner', 'y', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SX:</span>
+                <input
+                  type="number"
+                  step="0.05"
+                  value={mixerPos.oneliner?.scaleX ?? 1}
+                  onChange={(e) => handleMixerPosChange('oneliner', 'scaleX', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SY:</span>
+                <input
+                  type="number"
+                  step="0.05"
+                  value={mixerPos.oneliner?.scaleY ?? 1}
+                  onChange={(e) => handleMixerPosChange('oneliner', 'scaleY', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+            </div>
+          </div>
+
           {loading ? (
             <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
@@ -470,7 +573,7 @@ export default function DatabaseExplorer({
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handlePlayOneliner(lineText, idx)}
-                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow"
+                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow cursor-pointer"
                         title={`Play Oneliner Line ${idx + 1} on Layer 2`}
                       >
                         <Play className="w-3.5 h-3.5 fill-current" />
@@ -508,6 +611,69 @@ export default function DatabaseExplorer({
             </button>
           </div>
 
+          {/* INDIVIDUAL WIDE MIXER CONTROLS FOR TWOLINER */}
+          <div className="bg-slate-100 dark:bg-slate-900/80 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 shadow-xs">
+            <div className="flex items-center justify-between gap-1 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800/80">
+              <div className="flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 font-mono uppercase">Mixer Controls:</span>
+              </div>
+              <button
+                onClick={() => handleResetMixer('twoliner')}
+                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[10px] transition-all cursor-pointer shadow-xs"
+                title="Reset Twoliner MIXER 1-2 CLEAR"
+              >
+                RST
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">X:</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={mixerPos.twoliner?.x ?? 0}
+                  onChange={(e) => handleMixerPosChange('twoliner', 'x', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Y:</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={mixerPos.twoliner?.y ?? 0}
+                  onChange={(e) => handleMixerPosChange('twoliner', 'y', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SX:</span>
+                <input
+                  type="number"
+                  step="0.05"
+                  value={mixerPos.twoliner?.scaleX ?? 1}
+                  onChange={(e) => handleMixerPosChange('twoliner', 'scaleX', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SY:</span>
+                <input
+                  type="number"
+                  step="0.05"
+                  value={mixerPos.twoliner?.scaleY ?? 1}
+                  onChange={(e) => handleMixerPosChange('twoliner', 'scaleY', e.target.value)}
+                  className="w-full min-w-0 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold text-right"
+                />
+              </div>
+            </div>
+          </div>
+
           {loading ? (
             <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
@@ -538,7 +704,7 @@ export default function DatabaseExplorer({
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => handlePlayTwolinerRow(item, idx)}
-                          className="px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow"
+                          className="px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow cursor-pointer"
                           title={`Play Twoliner Line ${idx + 1} on Layer 2`}
                         >
                           <Play className="w-3.5 h-3.5 fill-current" />

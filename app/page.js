@@ -172,7 +172,9 @@ export default function BroadcastDashboard() {
           const savedMixer = localStorage.getItem('casparcg_mixer_pos');
           if (savedMixer) {
             const parsed = JSON.parse(savedMixer);
-            if (parsed && parsed[targetLayer]) {
+            if (parsed && parsed[templateToSend]) {
+              layerMixer = parsed[templateToSend];
+            } else if (parsed && parsed[targetLayer]) {
               layerMixer = parsed[targetLayer];
             }
           }
@@ -180,10 +182,10 @@ export default function BroadcastDashboard() {
       }
 
       const mergedTemplateData = {
-        x: layerMixer.x ?? 0,
-        y: layerMixer.y ?? 0,
-        scaleX: layerMixer.scaleX ?? 1,
-        scaleY: layerMixer.scaleY ?? 1,
+        x: dataToSend.x !== undefined ? dataToSend.x : (layerMixer.x ?? 0),
+        y: dataToSend.y !== undefined ? dataToSend.y : (layerMixer.y ?? 0),
+        scaleX: dataToSend.scaleX !== undefined ? dataToSend.scaleX : (layerMixer.scaleX ?? 1),
+        scaleY: dataToSend.scaleY !== undefined ? dataToSend.scaleY : (layerMixer.scaleY ?? 1),
         ...dataToSend
       };
 

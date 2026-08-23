@@ -103,7 +103,7 @@ export default function TwolinerDataStripTemplate() {
           opacity: opacityVal,
           transition: animState === 'idle' ? 'none' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease',
           // boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85)',
-          background: 'linear-gradient(90deg, rgba(255, 255, 254, 0.96) 0%, rgba(253, 254, 255, 0.94) 100%)',
+          background: 'linear-gradient(90deg, rgba(255, 255, 254, 0.96) 0%, rgba(253, 254, 255, 1) 100%)',
           backdropFilter: 'blur(16px)',
           borderLeft: '30px solid #f6603b',
           borderRight: '30px solid #f6603b',

@@ -40,16 +40,15 @@ Built for television broadcast operators, newsroom directors, and MCR engineers,
 ---
 
 ### 📐 3. Real-Time Live AMCP Mixer Controls
-- **4-DOF Layer Manipulation** for Layer 2:
-  - **X**: Horizontal position offset (`0.01` step).
-  - **Y**: Vertical position offset (`0.01` step).
-  - **SX**: Horizontal Scale Factor (`0.05` step, default `1.0`).
-  - **SY**: Vertical Scale Factor (`0.05` step, default `1.0`).
-- **Live Real-Time Execution**: Adjusting numeric values automatically dispatches AMCP commands live on air:
-  ```amcp
-  MIXER 1-2 FILL 0.05 -0.02 0.95 0.95
-  ```
-- **RST Button**: Instantly resets positioning and issues `MIXER X-2 CLEAR`.
+- **Individual 4-DOF Layer Manipulation** for each graphic type on Layer 2:
+  - **Headlines Mixer**: Independent X, Y, SX, SY controls for Headlines.
+  - **Oneliner Mixer**: Independent X, Y, SX, SY controls for Oneliner.
+  - **Twoliner Mixer**: Independent X, Y, SX, SY controls for Twoliner.
+  - **Live Real-Time Execution**: Adjusting numeric values automatically dispatches AMCP commands live on air:
+    ```amcp
+    MIXER 1-2 FILL 0.05 -0.02 0.95 0.95
+    ```
+  - **RST Button**: Instantly resets the specific graphic type's transform and issues `MIXER X-2 CLEAR`.
 
 ---
 
