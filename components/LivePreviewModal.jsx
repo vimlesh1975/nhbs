@@ -32,14 +32,14 @@ export default function LivePreviewModal({ templateId, payloadData, onClose }) {
   const templateUrl = `/templates/${templateId || 'headlines'}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-      <div className="glass-panel w-full max-w-5xl overflow-hidden shadow-2xl border border-slate-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md">
+      <div className="glass-panel w-full max-w-5xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-0 !p-0">
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
           <div className="flex items-center gap-2">
-            <Monitor className="w-5 h-5 text-indigo-400" />
-            <h3 className="font-bold text-sm text-white">
-              Live Web Graphic Preview — <span className="text-indigo-400 font-mono">/{templateId}</span>
+            <Monitor className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              Live Web Graphic Preview — <span className="text-indigo-600 dark:text-indigo-400 font-mono">/{templateId}</span>
             </h3>
           </div>
 
@@ -48,14 +48,14 @@ export default function LivePreviewModal({ templateId, payloadData, onClose }) {
               href={templateUrl}
               target="_blank"
               rel="noreferrer"
-              className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1 border border-slate-700"
+              className="p-1.5 rounded bg-white hover:bg-slate-100 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 text-xs flex items-center gap-1 border border-slate-200 dark:border-slate-700 shadow-xs"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>Open Standalone Tab</span>
             </a>
             <button
               onClick={onClose}
-              className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white"
+              className="p-1.5 rounded bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:hover:text-white border border-slate-200 dark:border-slate-700 shadow-xs"
             >
               <X className="w-4 h-4" />
             </button>
@@ -63,7 +63,7 @@ export default function LivePreviewModal({ templateId, payloadData, onClose }) {
         </div>
 
         {/* 16:9 Broadcast Preview Container */}
-        <div className="p-6 bg-slate-950 flex flex-col items-center">
+        <div className="p-6 bg-slate-100 dark:bg-slate-950 flex flex-col items-center">
           <div 
             className="w-full aspect-video rounded-xl overflow-hidden border border-slate-800 shadow-2xl relative"
             style={{

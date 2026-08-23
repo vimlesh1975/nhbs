@@ -234,13 +234,13 @@ export default function DatabaseExplorer({
   };
 
   return (
-    <div className="glass-panel p-5 mb-6 border-l-4 border-l-cyan-400">
+    <div className="glass-panel p-5 mb-6 border-l-4 border-l-cyan-400 bg-white/90 dark:bg-slate-950/80 transition-colors duration-200">
       {/* SIDE-BY-SIDE CONTROL BAR: Date Selector + News Bulletin Combo Box */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 shadow-md">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 bg-slate-50 dark:bg-slate-900/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md">
         {/* 1. Date Selector */}
         <div>
-          <label className="block text-[11px] font-bold text-cyan-300 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
-            <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+          <label className="block text-[11px] font-bold text-cyan-700 dark:text-cyan-300 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
+            <Calendar className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
             <span>1. Broadcast Date Selector</span>
           </label>
           <div className="flex items-center gap-1.5">
@@ -254,14 +254,14 @@ export default function DatabaseExplorer({
               onFocus={(e) => {
                 try { if (e.target.showPicker) e.target.showPicker(); } catch (err) {}
               }}
-              className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-cyan-400 cursor-pointer"
+              className="flex-1 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-cyan-400 cursor-pointer"
             />
             <button
               onClick={setTodayDate}
               className={`px-2.5 py-1.5 rounded text-[11px] font-bold border transition-all ${
                 selectedDate === new Date().toISOString().split('T')[0]
                   ? 'bg-cyan-600 border-cyan-400 text-white shadow'
-                  : 'bg-slate-950 border-slate-700 text-slate-300 hover:bg-slate-800'
+                  : 'bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
               Today
@@ -271,14 +271,14 @@ export default function DatabaseExplorer({
 
         {/* 2. News Bulletin Combo Box */}
         <div>
-          <label className="block text-[11px] font-bold text-cyan-300 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
-            <Radio className="w-3.5 h-3.5 text-cyan-400" />
+          <label className="block text-[11px] font-bold text-cyan-700 dark:text-cyan-300 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
+            <Radio className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
             <span>2. News Bulletin (bulletin Table)</span>
           </label>
           <select
             value={selectedBulletin}
             onChange={(e) => setSelectedBulletin(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white font-semibold focus:outline-none focus:border-cyan-500"
+            className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-cyan-500"
           >
             <option value="">-- Select News Bulletin --</option>
             {bulletinOptions.map((b, idx) => (
@@ -303,14 +303,14 @@ export default function DatabaseExplorer({
       {/* 3-COLUMN SIDE-BY-SIDE GRID: HEADLINES (LAYER 2) | ONELINER (LAYER 3) | TWOLINER (LAYER 4) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* COLUMN 1: HEADLINES (LAYER 2) */}
-        <div className="bg-slate-950/90 p-3.5 rounded-xl border border-slate-800">
-          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
+        <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1.5">
-              <FileCode className="w-4 h-4 text-emerald-400" />
+              <FileCode className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
               <div>
-                <h3 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                   <span>HEADLINES</span>
-                  <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[9px] font-mono rounded">
+                  <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/40 text-[9px] font-mono rounded">
                     L2
                   </span>
                 </h3>
@@ -342,60 +342,60 @@ export default function DatabaseExplorer({
           </div>
 
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 2 */}
-          <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
+          <div className="bg-slate-100 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
             <div className="flex items-center gap-1">
-              <Sliders className="w-3 h-3 text-cyan-400" />
-              <span className="text-[10px] font-bold text-slate-300 font-mono">MIXER:</span>
+              <Sliders className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
+              <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="X Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-400">X:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[2]?.x ?? 0}
                   onChange={(e) => handleMixerPosChange(2, 'x', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Y Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-400">Y:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[2]?.y ?? 0}
                   onChange={(e) => handleMixerPosChange(2, 'y', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Scale X">
-                <span className="text-[9px] font-mono font-bold text-emerald-400">SX:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[2]?.scaleX ?? 1}
                   onChange={(e) => handleMixerPosChange(2, 'scaleX', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Scale Y">
-                <span className="text-[9px] font-mono font-bold text-emerald-400">SY:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[2]?.scaleY ?? 1}
                   onChange={(e) => handleMixerPosChange(2, 'scaleY', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
               <button
                 onClick={() => handleResetMixer(2)}
-                className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[9px] transition-all"
+                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[9px] transition-all"
                 title="Reset MIXER 1-2 CLEAR"
               >
                 RST
@@ -417,11 +417,11 @@ export default function DatabaseExplorer({
                     key={idx}
                     className={`flex items-center gap-1.5 p-1.5 rounded-lg border transition-all ${
                       isActive
-                        ? 'bg-cyan-950/80 border-cyan-400 shadow-md shadow-cyan-950'
-                        : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950'
+                        : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
-                    <span className="w-7 text-center py-1 rounded bg-slate-950 border border-slate-700 text-[10px] font-mono text-cyan-300 font-bold shrink-0">
+                    <span className="w-7 text-center py-1 rounded bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-mono text-cyan-700 dark:text-cyan-300 font-bold shrink-0">
                       L{idx + 1}
                     </span>
 
@@ -430,7 +430,7 @@ export default function DatabaseExplorer({
                       value={lineText}
                       onChange={(e) => handleHeadlineChange(idx, e.target.value)}
                       placeholder={`Headline ${idx + 1}...`}
-                      className="flex-1 min-w-[100px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-white font-bold focus:outline-none focus:border-cyan-400"
+                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400"
                     />
 
                     <div className="flex items-center gap-1 shrink-0">
@@ -451,14 +451,14 @@ export default function DatabaseExplorer({
         </div>
 
         {/* COLUMN 2: ONELINER (LAYER 3) */}
-        <div className="bg-slate-950/90 p-3.5 rounded-xl border border-slate-800">
-          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
+        <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1.5">
-              <FileCode className="w-4 h-4 text-cyan-400" />
+              <FileCode className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
               <div>
-                <h3 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                   <span>ONELINER</span>
-                  <span className="px-1.5 py-0.2 bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[9px] font-mono rounded">
+                  <span className="px-1.5 py-0.2 bg-cyan-500/20 text-cyan-700 dark:text-cyan-400 border border-cyan-500/40 text-[9px] font-mono rounded">
                     L3
                   </span>
                 </h3>
@@ -490,60 +490,60 @@ export default function DatabaseExplorer({
           </div>
 
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 3 */}
-          <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
+          <div className="bg-slate-100 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
             <div className="flex items-center gap-1">
-              <Sliders className="w-3 h-3 text-cyan-400" />
-              <span className="text-[10px] font-bold text-slate-300 font-mono">MIXER:</span>
+              <Sliders className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
+              <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="X Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-400">X:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[3]?.x ?? 0}
                   onChange={(e) => handleMixerPosChange(3, 'x', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Y Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-400">Y:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[3]?.y ?? 0}
                   onChange={(e) => handleMixerPosChange(3, 'y', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Scale X">
-                <span className="text-[9px] font-mono font-bold text-emerald-400">SX:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[3]?.scaleX ?? 1}
                   onChange={(e) => handleMixerPosChange(3, 'scaleX', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Scale Y">
-                <span className="text-[9px] font-mono font-bold text-emerald-400">SY:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[3]?.scaleY ?? 1}
                   onChange={(e) => handleMixerPosChange(3, 'scaleY', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
               <button
                 onClick={() => handleResetMixer(3)}
-                className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[9px] transition-all"
+                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[9px] transition-all"
                 title="Reset MIXER 1-3 CLEAR"
               >
                 RST
@@ -565,11 +565,11 @@ export default function DatabaseExplorer({
                     key={idx}
                     className={`flex items-center gap-1.5 p-1.5 rounded-lg border transition-all ${
                       isActive
-                        ? 'bg-cyan-950/80 border-cyan-400 shadow-md shadow-cyan-950'
-                        : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950'
+                        : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
-                    <span className="w-7 text-center py-1 rounded bg-slate-950 border border-slate-700 text-[10px] font-mono text-cyan-300 font-bold shrink-0">
+                    <span className="w-7 text-center py-1 rounded bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-mono text-cyan-700 dark:text-cyan-300 font-bold shrink-0">
                       L{idx + 1}
                     </span>
 
@@ -578,7 +578,7 @@ export default function DatabaseExplorer({
                       value={lineText}
                       onChange={(e) => handleOnelinerChange(idx, e.target.value)}
                       placeholder={`Oneliner ${idx + 1}...`}
-                      className="flex-1 min-w-[100px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-white font-bold focus:outline-none focus:border-cyan-400"
+                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400"
                     />
 
                     <div className="flex items-center gap-1 shrink-0">
@@ -599,14 +599,14 @@ export default function DatabaseExplorer({
         </div>
 
         {/* COLUMN 3: TWOLINER (LAYER 4) */}
-        <div className="bg-slate-950/90 p-3.5 rounded-xl border border-slate-800">
-          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
+        <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1.5">
-              <FileCode className="w-4 h-4 text-blue-400" />
+              <FileCode className="w-4 h-4 text-blue-500 dark:text-blue-400" />
               <div>
-                <h3 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                   <span>TWOLINER</span>
-                  <span className="px-1.5 py-0.2 bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[9px] font-mono rounded">
+                  <span className="px-1.5 py-0.2 bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/40 text-[9px] font-mono rounded">
                     L4
                   </span>
                 </h3>
@@ -638,60 +638,60 @@ export default function DatabaseExplorer({
           </div>
 
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 4 */}
-          <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
+          <div className="bg-slate-100 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
             <div className="flex items-center gap-1">
-              <Sliders className="w-3 h-3 text-cyan-400" />
-              <span className="text-[10px] font-bold text-slate-300 font-mono">MIXER:</span>
+              <Sliders className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
+              <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="X Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-400">X:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[4]?.x ?? 0}
                   onChange={(e) => handleMixerPosChange(4, 'x', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Y Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-400">Y:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[4]?.y ?? 0}
                   onChange={(e) => handleMixerPosChange(4, 'y', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Scale X">
-                <span className="text-[9px] font-mono font-bold text-emerald-400">SX:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[4]?.scaleX ?? 1}
                   onChange={(e) => handleMixerPosChange(4, 'scaleX', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800" title="Scale Y">
-                <span className="text-[9px] font-mono font-bold text-emerald-400">SY:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[4]?.scaleY ?? 1}
                   onChange={(e) => handleMixerPosChange(4, 'scaleY', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-white focus:outline-none font-bold"
+                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
               <button
                 onClick={() => handleResetMixer(4)}
-                className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[9px] transition-all"
+                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[9px] transition-all"
                 title="Reset MIXER 1-4 CLEAR"
               >
                 RST
@@ -713,17 +713,17 @@ export default function DatabaseExplorer({
                     key={idx}
                     className={`p-2 rounded-lg border transition-all ${
                       isActive
-                        ? 'bg-cyan-950/80 border-cyan-400 shadow-md shadow-cyan-950'
-                        : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950'
+                        : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
                     {/* Row Header with Badge & Playout Buttons */}
                     <div className="flex items-center justify-between gap-1.5 mb-1.5">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-6 text-center py-0.5 rounded bg-slate-950 border border-slate-700 text-[10px] font-mono text-cyan-300 font-bold shrink-0">
+                        <span className="w-6 text-center py-0.5 rounded bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-mono text-cyan-700 dark:text-cyan-300 font-bold shrink-0">
                           L{idx + 1}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono italic">Name & Designation</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono italic">Name & Designation</span>
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
@@ -745,14 +745,14 @@ export default function DatabaseExplorer({
                         value={item.name || ''}
                         onChange={(e) => handleTwolinerFieldChange(idx, 'name', e.target.value)}
                         placeholder="Line 1: Name..."
-                        className="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-white font-bold focus:outline-none focus:border-cyan-400"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400"
                       />
                       <input
                         type="text"
                         value={item.designation || ''}
                         onChange={(e) => handleTwolinerFieldChange(idx, 'designation', e.target.value)}
                         placeholder="Line 2: Designation..."
-                        className="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-[11px] text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-[11px] text-cyan-700 dark:text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500"
                       />
                     </div>
                   </div>

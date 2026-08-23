@@ -5,8 +5,28 @@
 @tailwind utilities;
 
 :root {
+  --bg-main: #f1f5f9;
+  --bg-panel: rgba(255, 255, 255, 0.88);
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --border-color: rgba(0, 0, 0, 0.09);
+  --border-accent: rgba(59, 130, 246, 0.4);
+  
+  --accent-blue: #2563eb;
+  --accent-cyan: #0891b2;
+  --accent-indigo: #4f46e5;
+  --accent-green: #059669;
+  --accent-amber: #d97706;
+  --accent-red: #dc2626;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+}
+
+.dark {
   --bg-main: #070a12;
-  --bg-panel: #0d1322;
+  --bg-panel: rgba(13, 19, 34, 0.85);
   --bg-card: #131b2e;
   --bg-card-hover: #1a253e;
   --border-color: rgba(255, 255, 255, 0.08);
@@ -33,7 +53,6 @@
 html, body {
   background: transparent !important;
   background-color: transparent !important;
-  color: #f8fafc;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   margin: 0;
   padding: 0;
@@ -45,41 +64,57 @@ html, body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(241, 245, 249, 0.8);
 }
 ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.8);
+}
+.dark ::-webkit-scrollbar-thumb {
   background: #334155;
   border-radius: 4px;
 }
 
 /* Date Picker Indicator Icon */
-input[type="date"]::-webkit-calendar-picker-indicator {
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer !important;
   filter: invert(0.8) sepia(100%) saturate(500%) hue-rotate(150deg) !important;
   opacity: 0.9 !important;
 }
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer !important;
+  opacity: 0.75 !important;
+}
 
 /* Studio Glass Card & Panels */
 .glass-panel {
-  background: rgba(13, 19, 34, 0.85) !important;
+  background: var(--bg-panel) !important;
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid var(--border-color) !important;
   border-radius: 12px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   padding: 1.25rem !important;
   margin-bottom: 1.5rem !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .glass-panel {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .glass-card {
-  background: #131b2e !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
   border-radius: 8px !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  background: #1a253e !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: var(--bg-card-hover) !important;
+  border-color: var(--border-accent) !important;
   transform: translateY(-2px);
 }
 
@@ -205,21 +240,36 @@ table {
 }
 
 th {
-  background: #0f172a !important;
-  color: #94a3b8 !important;
+  background: #f1f5f9 !important;
+  color: #475569 !important;
   font-size: 11px !important;
   font-weight: 700 !important;
   text-transform: uppercase;
   padding: 10px 14px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.dark th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
   border-bottom: 1px solid #1e293b !important;
 }
 
 td {
   padding: 10px 14px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  color: #1e293b;
+}
+
+.dark td {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
   color: #e2e8f0;
 }
 
 tr:hover {
+  background: rgba(241, 245, 249, 0.6) !important;
+}
+
+.dark tr:hover {
   background: rgba(30, 41, 59, 0.5) !important;
 }

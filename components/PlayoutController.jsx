@@ -24,18 +24,18 @@ export default function PlayoutController({
   const templateUrl = `http://${casparHost || '127.0.0.1'}:22000/templates/${selectedTemplate}`;
 
   return (
-    <div className="glass-panel p-5 mb-6 border-l-4 border-l-blue-500">
+    <div className="glass-panel p-5 mb-6 border-l-4 border-l-blue-500 bg-white/90 dark:bg-slate-950/80 transition-colors duration-200">
       {/* Playout Control Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-200 dark:border-slate-800">
         <div>
           <div className="flex items-center gap-2">
-            <Monitor className="w-5 h-5 text-blue-400" />
-            <h2 className="text-sm font-bold tracking-wider text-slate-200 uppercase">
+            <Monitor className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+            <h2 className="text-sm font-bold tracking-wider text-slate-900 dark:text-slate-200 uppercase">
               Playout Controller & Live AMCP Command Deck
             </h2>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Active Routing Target: <span className="font-mono text-cyan-400 font-bold">CHANNEL {channel} / LAYER {layer}</span>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Active Routing Target: <span className="font-mono text-cyan-600 dark:text-cyan-400 font-bold">CHANNEL {channel} / LAYER {layer}</span>
           </p>
         </div>
 
@@ -91,8 +91,8 @@ export default function PlayoutController({
               onClick={() => setActiveTab('fields')}
               className={`px-3 py-1 rounded text-xs font-bold transition-all ${
                 activeTab === 'fields'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-900 text-slate-400 hover:text-slate-200'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Form Field Mapper
@@ -101,21 +101,21 @@ export default function PlayoutController({
               onClick={() => setActiveTab('json')}
               className={`px-3 py-1 rounded text-xs font-bold transition-all ${
                 activeTab === 'json'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-900 text-slate-400 hover:text-slate-200'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Raw AMCP JSON Payload
             </button>
           </div>
 
-          <span className="text-[11px] text-slate-400 mono-font">
-            Template URL: <code className="text-indigo-300">{templateUrl}</code>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 mono-font">
+            Template URL: <code className="text-indigo-600 dark:text-indigo-300 font-semibold">{templateUrl}</code>
           </span>
         </div>
 
         {activeTab === 'fields' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-950/60 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
             {Object.keys(payloadData).length === 0 ? (
               <div className="col-span-full py-4 text-center text-xs text-slate-500">
                 No record cued. Select a row from the MySQL Database Explorer above to auto-populate fields.
@@ -123,14 +123,14 @@ export default function PlayoutController({
             ) : (
               Object.entries(payloadData).map(([key, value]) => (
                 <div key={key}>
-                  <label className="block text-[11px] font-bold text-slate-400 mb-1 mono-font uppercase">
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1 mono-font uppercase">
                     {key}
                   </label>
                   <input
                     type="text"
                     value={value || ''}
                     onChange={(e) => handleFieldChange(key, e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-md px-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 shadow-xs"
                   />
                 </div>
               ))

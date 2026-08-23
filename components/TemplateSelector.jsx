@@ -30,11 +30,11 @@ export default function TemplateSelector({ selectedTemplate, onSelectTemplate, o
   ];
 
   return (
-    <div className="glass-panel p-5 mb-6">
+    <div className="glass-panel p-5 mb-6 bg-white/90 dark:bg-slate-950/80 transition-colors duration-200">
       <div className="flex items-center justify-between gap-4 mb-4">
         <div className="flex items-center gap-2">
-          <Layout className="w-5 h-5 text-indigo-400" />
-          <h2 className="text-sm font-bold tracking-wider text-slate-200 uppercase">
+          <Layout className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
+          <h2 className="text-sm font-bold tracking-wider text-slate-900 dark:text-slate-200 uppercase">
             CasparCG HTML Template Library
           </h2>
         </div>
@@ -42,9 +42,9 @@ export default function TemplateSelector({ selectedTemplate, onSelectTemplate, o
         {/* Live Preview Template Button */}
         <button
           onClick={() => onOpenPreviewModal(selectedTemplate)}
-          className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-700"
+          className="px-3 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5 border dark:border-slate-700 shadow-xs"
         >
-          <Eye className="w-3.5 h-3.5 text-indigo-400" />
+          <Eye className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
           <span>WEB PREVIEW TEMPLATE</span>
         </button>
       </div>
@@ -60,8 +60,8 @@ export default function TemplateSelector({ selectedTemplate, onSelectTemplate, o
               onClick={() => onSelectTemplate(tpl.id)}
               className={`p-4 rounded-xl border cursor-pointer transition-all relative overflow-hidden ${
                 isSelected
-                  ? 'bg-slate-900 border-indigo-500 shadow-lg shadow-indigo-500/20 ring-1 ring-indigo-500'
-                  : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/40'
+                  ? 'bg-indigo-50/70 border-indigo-500 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-500 dark:bg-slate-900 dark:border-indigo-500 dark:shadow-indigo-500/20'
+                  : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 dark:bg-slate-950/60 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:bg-slate-900/40 shadow-xs'
               }`}
             >
               {/* Gradient Accent Bar */}
@@ -72,18 +72,18 @@ export default function TemplateSelector({ selectedTemplate, onSelectTemplate, o
                   <IconComponent className="w-5 h-5 text-white" />
                 </div>
                 {isSelected && (
-                  <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-[10px] font-black uppercase">
+                  <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border border-indigo-500/30 text-[10px] font-black uppercase">
                     ACTIVE
                   </span>
                 )}
               </div>
 
-              <h3 className="font-extrabold text-sm text-white mt-3">{tpl.name}</h3>
-              <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">{tpl.desc}</p>
+              <h3 className="font-extrabold text-sm text-slate-900 dark:text-white mt-3">{tpl.name}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">{tpl.desc}</p>
               
-              <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
-                <span className="mono-font text-slate-500">/{tpl.id}</span>
-                <span className="text-indigo-400 font-semibold hover:underline">Select & Map →</span>
+              <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px]">
+                <span className="mono-font text-slate-400 dark:text-slate-500">/{tpl.id}</span>
+                <span className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Select & Map →</span>
               </div>
             </div>
           );
