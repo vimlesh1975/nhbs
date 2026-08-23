@@ -239,11 +239,11 @@ export default function DatabaseExplorer({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 bg-slate-50 dark:bg-slate-900/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md">
         {/* 1. Date Selector */}
         <div>
-          <label className="block text-[11px] font-bold text-cyan-700 dark:text-cyan-300 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
-            <Calendar className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
+          <label className="block text-xs font-bold text-cyan-700 dark:text-cyan-300 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
+            <Calendar className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
             <span>1. Broadcast Date Selector</span>
           </label>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <input
               type="date"
               value={selectedDate || ''}
@@ -254,14 +254,14 @@ export default function DatabaseExplorer({
               onFocus={(e) => {
                 try { if (e.target.showPicker) e.target.showPicker(); } catch (err) {}
               }}
-              className="flex-1 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-cyan-400 cursor-pointer"
+              className="flex-1 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-semibold text-slate-900 dark:text-white font-mono focus:outline-none focus:border-cyan-400 cursor-pointer shadow-xs"
             />
             <button
               onClick={setTodayDate}
-              className={`px-2.5 py-1.5 rounded text-[11px] font-bold border transition-all ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold border transition-all ${
                 selectedDate === new Date().toISOString().split('T')[0]
                   ? 'bg-cyan-600 border-cyan-400 text-white shadow'
-                  : 'bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  : 'bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs'
               }`}
             >
               Today
@@ -271,14 +271,14 @@ export default function DatabaseExplorer({
 
         {/* 2. News Bulletin Combo Box */}
         <div>
-          <label className="block text-[11px] font-bold text-cyan-700 dark:text-cyan-300 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
-            <Radio className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
+          <label className="block text-xs font-bold text-cyan-700 dark:text-cyan-300 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
+            <Radio className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
             <span>2. News Bulletin (bulletin Table)</span>
           </label>
           <select
             value={selectedBulletin}
             onChange={(e) => setSelectedBulletin(e.target.value)}
-            className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-cyan-500"
+            className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-500 shadow-xs"
           >
             <option value="">-- Select News Bulletin --</option>
             {bulletinOptions.map((b, idx) => (
@@ -291,10 +291,10 @@ export default function DatabaseExplorer({
             type="button"
             onClick={fetchScripts}
             disabled={loading || !selectedDate || !selectedBulletin}
-            className="mt-2 w-full px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow"
+            className="mt-2 w-full px-3 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow"
             title="Refresh scripts for the selected date and bulletin"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             <span>{loading ? 'Refreshing...' : 'Refresh Scripts'}</span>
           </button>
         </div>
@@ -304,7 +304,7 @@ export default function DatabaseExplorer({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* COLUMN 1: HEADLINES (LAYER 2) */}
         <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1.5">
               <FileCode className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
               <div>
@@ -324,18 +324,18 @@ export default function DatabaseExplorer({
                   setActiveLineKey(null);
                   if (onExecuteAction) onExecuteAction('STOP', '', null, 'headlines', 2);
                 }}
-                className="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                className="px-2.5 py-1 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
                 title="Stop Layer 2 Headlines graphics"
               >
-                <RadioIcon className="w-3 h-3" />
+                <RadioIcon className="w-3.5 h-3.5" />
                 <span>STOP</span>
               </button>
 
               <button
                 onClick={handleAddHeadline}
-                className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
               >
-                <Plus className="w-3 h-3" />
+                <Plus className="w-3.5 h-3.5" />
                 <span>Add</span>
               </button>
             </div>
@@ -344,58 +344,58 @@ export default function DatabaseExplorer({
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 2 */}
           <div className="bg-slate-100 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
             <div className="flex items-center gap-1">
-              <Sliders className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
-              <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
+              <Sliders className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[2]?.x ?? 0}
                   onChange={(e) => handleMixerPosChange(2, 'x', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[2]?.y ?? 0}
                   onChange={(e) => handleMixerPosChange(2, 'y', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
-                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[2]?.scaleX ?? 1}
                   onChange={(e) => handleMixerPosChange(2, 'scaleX', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
-                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[2]?.scaleY ?? 1}
                   onChange={(e) => handleMixerPosChange(2, 'scaleY', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
               <button
                 onClick={() => handleResetMixer(2)}
-                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[9px] transition-all"
+                className="px-2.5 py-1 rounded-md bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[10px] transition-all"
                 title="Reset MIXER 1-2 CLEAR"
               >
                 RST
@@ -404,24 +404,24 @@ export default function DatabaseExplorer({
           </div>
 
           {loading ? (
-            <div className="p-4 text-center text-slate-500 text-xs font-mono">
+            <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
             </div>
           ) : (
-            <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
               {headlineLines.map((lineText, idx) => {
                 const isActive = activeLineKey === `headline-${idx}`;
 
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center gap-1.5 p-1.5 rounded-lg border transition-all ${
+                    className={`flex items-center gap-2 p-2 rounded-lg border transition-all ${
                       isActive
-                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950'
+                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950 ring-1 ring-cyan-400'
                         : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
-                    <span className="w-7 text-center py-1 rounded bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-mono text-cyan-700 dark:text-cyan-300 font-bold shrink-0">
+                    <span className="w-8 text-center py-1.5 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
                       L{idx + 1}
                     </span>
 
@@ -430,16 +430,16 @@ export default function DatabaseExplorer({
                       value={lineText}
                       onChange={(e) => handleHeadlineChange(idx, e.target.value)}
                       placeholder={`Headline ${idx + 1}...`}
-                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400"
+                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-base text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                     />
 
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handlePlayLine(lineText, idx, 'headline')}
-                        className="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-0.5 transition-all shadow"
+                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow"
                         title={`Play Headline Line ${idx + 1} on Layer 2`}
                       >
-                        <Play className="w-3 h-3 fill-current" />
+                        <Play className="w-3.5 h-3.5 fill-current" />
                         <span>PLAY</span>
                       </button>
                     </div>
@@ -452,7 +452,7 @@ export default function DatabaseExplorer({
 
         {/* COLUMN 2: ONELINER (LAYER 3) */}
         <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1.5">
               <FileCode className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
               <div>
@@ -472,18 +472,18 @@ export default function DatabaseExplorer({
                   setActiveLineKey(null);
                   if (onExecuteAction) onExecuteAction('STOP', '', null, 'oneliner', 3);
                 }}
-                className="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                className="px-2.5 py-1 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
                 title="Stop Layer 3 Oneliner graphics"
               >
-                <RadioIcon className="w-3 h-3" />
+                <RadioIcon className="w-3.5 h-3.5" />
                 <span>STOP</span>
               </button>
 
               <button
                 onClick={handleAddOneliner}
-                className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
               >
-                <Plus className="w-3 h-3" />
+                <Plus className="w-3.5 h-3.5" />
                 <span>Add</span>
               </button>
             </div>
@@ -492,58 +492,58 @@ export default function DatabaseExplorer({
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 3 */}
           <div className="bg-slate-100 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
             <div className="flex items-center gap-1">
-              <Sliders className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
-              <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
+              <Sliders className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[3]?.x ?? 0}
                   onChange={(e) => handleMixerPosChange(3, 'x', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[3]?.y ?? 0}
                   onChange={(e) => handleMixerPosChange(3, 'y', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
-                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[3]?.scaleX ?? 1}
                   onChange={(e) => handleMixerPosChange(3, 'scaleX', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
-                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[3]?.scaleY ?? 1}
                   onChange={(e) => handleMixerPosChange(3, 'scaleY', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
               <button
                 onClick={() => handleResetMixer(3)}
-                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[9px] transition-all"
+                className="px-2.5 py-1 rounded-md bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[10px] transition-all"
                 title="Reset MIXER 1-3 CLEAR"
               >
                 RST
@@ -552,24 +552,24 @@ export default function DatabaseExplorer({
           </div>
 
           {loading ? (
-            <div className="p-4 text-center text-slate-500 text-xs font-mono">
+            <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
             </div>
           ) : (
-            <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
               {onelinerLines.map((lineText, idx) => {
                 const isActive = activeLineKey === `oneliner-${idx}`;
 
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center gap-1.5 p-1.5 rounded-lg border transition-all ${
+                    className={`flex items-center gap-2 p-2 rounded-lg border transition-all ${
                       isActive
-                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950'
+                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950 ring-1 ring-cyan-400'
                         : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
-                    <span className="w-7 text-center py-1 rounded bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-mono text-cyan-700 dark:text-cyan-300 font-bold shrink-0">
+                    <span className="w-8 text-center py-1.5 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
                       L{idx + 1}
                     </span>
 
@@ -578,16 +578,16 @@ export default function DatabaseExplorer({
                       value={lineText}
                       onChange={(e) => handleOnelinerChange(idx, e.target.value)}
                       placeholder={`Oneliner ${idx + 1}...`}
-                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400"
+                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-base text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                     />
 
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handlePlayLine(lineText, idx, 'oneliner')}
-                        className="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-0.5 transition-all shadow"
+                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow"
                         title={`Play Oneliner Line ${idx + 1} on Layer 3`}
                       >
-                        <Play className="w-3 h-3 fill-current" />
+                        <Play className="w-3.5 h-3.5 fill-current" />
                         <span>PLAY</span>
                       </button>
                     </div>
@@ -600,7 +600,7 @@ export default function DatabaseExplorer({
 
         {/* COLUMN 3: TWOLINER (LAYER 4) */}
         <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1.5">
               <FileCode className="w-4 h-4 text-blue-500 dark:text-blue-400" />
               <div>
@@ -620,18 +620,18 @@ export default function DatabaseExplorer({
                   setActiveLineKey(null);
                   if (onExecuteAction) onExecuteAction('STOP', '', null, 'twoliner', 4);
                 }}
-                className="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                className="px-2.5 py-1 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
                 title="Stop Layer 4 Twoliner graphics"
               >
-                <RadioIcon className="w-3 h-3" />
+                <RadioIcon className="w-3.5 h-3.5" />
                 <span>STOP</span>
               </button>
 
               <button
                 onClick={handleAddTwoliner}
-                className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold rounded flex items-center gap-0.5 transition-all shadow"
+                className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
               >
-                <Plus className="w-3 h-3" />
+                <Plus className="w-3.5 h-3.5" />
                 <span>Add</span>
               </button>
             </div>
@@ -640,58 +640,58 @@ export default function DatabaseExplorer({
           {/* LIVE AUTO-SEND MIXER POS & SCALE (X, Y, SX, SY) DECK FOR LAYER 4 */}
           <div className="bg-slate-100 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 mb-3 flex flex-wrap items-center justify-between gap-1.5">
             <div className="flex items-center gap-1">
-              <Sliders className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
-              <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
+              <Sliders className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 font-mono">MIXER:</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">X:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[4]?.x ?? 0}
                   onChange={(e) => handleMixerPosChange(4, 'x', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
-                <span className="text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+                <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Y:</span>
                 <input
                   type="number"
                   step="0.01"
                   value={mixerPos[4]?.y ?? 0}
                   onChange={(e) => handleMixerPosChange(4, 'y', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
-                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SX:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[4]?.scaleX ?? 1}
                   onChange={(e) => handleMixerPosChange(4, 'scaleX', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
-              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
-                <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
+              <div className="flex items-center gap-0.5 bg-white dark:bg-slate-950 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">SY:</span>
                 <input
                   type="number"
                   step="0.05"
                   value={mixerPos[4]?.scaleY ?? 1}
                   onChange={(e) => handleMixerPosChange(4, 'scaleY', e.target.value)}
-                  className="w-14 bg-transparent text-[11px] font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
+                  className="w-16 bg-transparent text-sm font-mono text-slate-900 dark:text-white focus:outline-none font-bold"
                 />
               </div>
 
               <button
                 onClick={() => handleResetMixer(4)}
-                className="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[9px] transition-all"
+                className="px-2.5 py-1 rounded-md bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-bold text-[10px] transition-all"
                 title="Reset MIXER 1-4 CLEAR"
               >
                 RST
@@ -700,59 +700,59 @@ export default function DatabaseExplorer({
           </div>
 
           {loading ? (
-            <div className="p-4 text-center text-slate-500 text-xs font-mono">
+            <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
             </div>
           ) : (
-            <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1">
               {twolinerLines.map((item, idx) => {
                 const isActive = activeLineKey === `twoliner-${idx}`;
 
                 return (
                   <div
                     key={idx}
-                    className={`p-2 rounded-lg border transition-all ${
+                    className={`p-2.5 rounded-lg border transition-all ${
                       isActive
-                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950'
+                        ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950 ring-1 ring-cyan-400'
                         : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
                     {/* Row Header with Badge & Playout Buttons */}
                     <div className="flex items-center justify-between gap-1.5 mb-1.5">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-6 text-center py-0.5 rounded bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[10px] font-mono text-cyan-700 dark:text-cyan-300 font-bold shrink-0">
+                        <span className="w-7 text-center py-1 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
                           L{idx + 1}
                         </span>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono italic">Name & Designation</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400 font-mono italic">Name & Designation</span>
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => handlePlayTwolinerRow(item, idx)}
-                          className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-0.5 transition-all shadow"
+                          className="px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow"
                           title={`Play Twoliner Line ${idx + 1} on Layer 4`}
                         >
-                          <Play className="w-3 h-3 fill-current" />
+                          <Play className="w-3.5 h-3.5 fill-current" />
                           <span>PLAY</span>
                         </button>
                       </div>
                     </div>
 
                     {/* 2 Stacked Input Boxes: Line 1 (Name) & Line 2 (Designation) */}
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                       <input
                         type="text"
                         value={item.name || ''}
                         onChange={(e) => handleTwolinerFieldChange(idx, 'name', e.target.value)}
                         placeholder="Line 1: Name..."
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-sm text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                       />
                       <input
                         type="text"
                         value={item.designation || ''}
                         onChange={(e) => handleTwolinerFieldChange(idx, 'designation', e.target.value)}
                         placeholder="Line 2: Designation..."
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-[11px] text-cyan-700 dark:text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-xs text-cyan-700 dark:text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                       />
                     </div>
                   </div>

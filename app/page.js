@@ -196,7 +196,7 @@ export default function BroadcastDashboard() {
 
   return (
     <div className="min-h-screen pb-12 bg-slate-100 text-slate-900 dark:bg-[#070a12] dark:text-slate-100 transition-colors duration-200">
-      {/* Header Bar */}
+      {/* Header Bar with Integrated Channel Matrix */}
       <Header
         casparConnected={casparConnected}
         dbStatus={dbStatus}
@@ -206,20 +206,13 @@ export default function BroadcastDashboard() {
         setCasparHost={setCasparHost}
         casparPort={casparPort}
         setCasparPort={setCasparPort}
+        channel={channel}
+        activeLayers={activeLayers}
+        onClearChannel={handleClearChannel}
       />
 
       {/* Main Studio Container */}
       <main className="max-w-[1800px] mx-auto px-6">
-        {/* Channel & Layer Matrix Switcher */}
-        <ChannelMatrix
-          channel={channel}
-          setChannel={setChannel}
-          layer={layer}
-          setLayer={setLayer}
-          activeLayers={activeLayers}
-          onClearChannel={handleClearChannel}
-        />
-
         {/* Headlines, Script & Bulletin DataGrid Parser */}
         <DatabaseExplorer
           onSelectDataRecord={handleSelectDataRecord}

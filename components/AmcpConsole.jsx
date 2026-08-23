@@ -69,10 +69,10 @@ export default function AmcpConsole({ logs, onClearLogs, onSendRawCommand }) {
             value={customCmd}
             onChange={(e) => setCustomCmd(e.target.value)}
             placeholder="Type raw AMCP command (e.g. VERSION, INFO 1, CG 1-1 PLAY 1, CLEAR 1)..."
-            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-900 dark:text-white mono-font focus:outline-none focus:border-emerald-500 shadow-xs"
+            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-900 dark:text-white mono-font focus:outline-none focus:border-emerald-500 shadow-xs"
           />
         </div>
-        <button type="submit" className="btn-primary py-2 text-xs flex items-center gap-1.5">
+        <button type="submit" className="btn-primary py-2 text-xs font-bold flex items-center gap-1.5">
           <Send className="w-3.5 h-3.5" />
           <span>SEND AMCP</span>
         </button>

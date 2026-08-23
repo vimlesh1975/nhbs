@@ -117,20 +117,20 @@ export default function PlayoutController({
         {activeTab === 'fields' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-950/60 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
             {Object.keys(payloadData).length === 0 ? (
-              <div className="col-span-full py-4 text-center text-xs text-slate-500">
+              <div className="col-span-full py-4 text-center text-sm text-slate-500">
                 No record cued. Select a row from the MySQL Database Explorer above to auto-populate fields.
               </div>
             ) : (
               Object.entries(payloadData).map(([key, value]) => (
                 <div key={key}>
-                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1 mono-font uppercase">
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1 mono-font uppercase">
                     {key}
                   </label>
                   <input
                     type="text"
                     value={value || ''}
                     onChange={(e) => handleFieldChange(key, e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 shadow-xs"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2 text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 shadow-xs"
                   />
                 </div>
               ))
@@ -146,7 +146,7 @@ export default function PlayoutController({
                   setPayloadData(JSON.parse(e.target.value));
                 } catch (err) {}
               }}
-              className="w-full bg-transparent text-xs text-emerald-400 mono-font focus:outline-none resize-none"
+              className="w-full bg-transparent text-sm text-emerald-400 mono-font focus:outline-none resize-none"
             />
           </div>
         )}
