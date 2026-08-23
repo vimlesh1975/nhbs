@@ -26,8 +26,8 @@ export default function Header({
   const isLayer2OnAir = activeLayers && activeLayers[`${channel}-2`];
 
   return (
-    <header className="glass-panel border-b border-slate-200 dark:border-slate-800 px-6 py-2.5 mb-5 sticky top-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md transition-colors duration-200">
-      <div className="max-w-[1800px] mx-auto flex flex-wrap items-center justify-between gap-3">
+    <header className="glass-panel border-b border-slate-200 dark:border-slate-800 px-3 sm:px-6 py-2.5 mb-4 sticky top-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md transition-colors duration-200">
+      <div className="w-full mx-auto flex flex-wrap items-center justify-between gap-3">
         
         {/* Leftmost: Date & Bulletin Selectors */}
         <div className="flex flex-wrap items-center gap-2">

@@ -285,7 +285,7 @@ export default function DatabaseExplorer({
   };
 
   return (
-    <div className="glass-panel p-5 mb-6 border-l-4 border-l-cyan-400 bg-white/90 dark:bg-slate-950/80 transition-colors duration-200">
+    <div className="w-full glass-panel p-3.5 sm:p-5 mb-6 border-l-4 border-l-cyan-400 bg-white/90 dark:bg-slate-950/80 transition-colors duration-200">
       
       {/* MASTER TOP CONTROL BAR: LAYER 2 BADGE & SINGLE MASTER STOP BUTTON */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4 p-3 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -316,13 +316,13 @@ export default function DatabaseExplorer({
         </div>
       </div>
 
-      {/* 3-COLUMN SIDE-BY-SIDE GRID: HEADLINES | ONELINER | TWOLINER */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* 3-COLUMN PROPORTIONAL GRID: HEADLINES (+10%) | ONELINER (+10%) | TWOLINER (-20%) */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.1fr_0.8fr] gap-4 xl:gap-5 w-full">
         
         {/* COLUMN 1: HEADLINES (LAYER 2) */}
-        <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-slate-50 dark:bg-slate-950/90 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
           <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <FileCode className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
               <div>
                 <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -336,7 +336,7 @@ export default function DatabaseExplorer({
 
             <button
               onClick={handleAddHeadline}
-              className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
+              className="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add</span>
@@ -360,7 +360,7 @@ export default function DatabaseExplorer({
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
                 <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">X:</span>
                 <input
                   type="number"
@@ -371,7 +371,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
                 <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Y:</span>
                 <input
                   type="number"
@@ -382,7 +382,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
                 <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SX:</span>
                 <input
                   type="number"
@@ -393,7 +393,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
                 <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SY:</span>
                 <input
                   type="number"
@@ -411,20 +411,20 @@ export default function DatabaseExplorer({
               Loading...
             </div>
           ) : (
-            <div className="space-y-2 max-h-[460px] overflow-y-auto pr-1">
+            <div className="space-y-2.5 max-h-[560px] overflow-y-auto pr-1">
               {headlineLines.map((lineText, idx) => {
                 const isActive = activeLineKey === `headline-${idx}`;
 
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center gap-2 p-2 rounded-lg border transition-all ${
+                    className={`flex items-center gap-2 p-2.5 rounded-lg border transition-all ${
                       isActive
                         ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950 ring-1 ring-cyan-400'
                         : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
-                    <span className="w-8 text-center py-1.5 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
+                    <span className="w-8 text-center py-2 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
                       L{idx + 1}
                     </span>
 
@@ -433,13 +433,13 @@ export default function DatabaseExplorer({
                       value={lineText}
                       onChange={(e) => handleHeadlineChange(idx, e.target.value)}
                       placeholder="Headline text..."
-                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-base text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
+                      className="flex-1 min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3.5 py-2 text-base font-bold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                     />
 
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handlePlayHeadline(lineText, idx)}
-                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow cursor-pointer"
+                        className="px-3.5 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow cursor-pointer"
                         title={`Play Headline Line ${idx + 1} on Layer 2`}
                       >
                         <Play className="w-3.5 h-3.5 fill-current" />
@@ -454,9 +454,9 @@ export default function DatabaseExplorer({
         </div>
 
         {/* COLUMN 2: ONELINER (LAYER 2) */}
-        <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-slate-50 dark:bg-slate-950/90 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
           <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <FileCode className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
               <div>
                 <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -470,7 +470,7 @@ export default function DatabaseExplorer({
 
             <button
               onClick={handleAddOneliner}
-              className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
+              className="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add</span>
@@ -494,7 +494,7 @@ export default function DatabaseExplorer({
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
                 <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">X:</span>
                 <input
                   type="number"
@@ -505,7 +505,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
                 <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Y:</span>
                 <input
                   type="number"
@@ -516,7 +516,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
                 <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SX:</span>
                 <input
                   type="number"
@@ -527,7 +527,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
                 <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SY:</span>
                 <input
                   type="number"
@@ -545,20 +545,20 @@ export default function DatabaseExplorer({
               Loading...
             </div>
           ) : (
-            <div className="space-y-2 max-h-[460px] overflow-y-auto pr-1">
+            <div className="space-y-2.5 max-h-[560px] overflow-y-auto pr-1">
               {onelinerLines.map((lineText, idx) => {
                 const isActive = activeLineKey === `oneliner-${idx}`;
 
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center gap-2 p-2 rounded-lg border transition-all ${
+                    className={`flex items-center gap-2 p-2.5 rounded-lg border transition-all ${
                       isActive
                         ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950 ring-1 ring-cyan-400'
                         : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
-                    <span className="w-8 text-center py-1.5 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
+                    <span className="w-8 text-center py-2 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
                       L{idx + 1}
                     </span>
 
@@ -567,13 +567,13 @@ export default function DatabaseExplorer({
                       value={lineText}
                       onChange={(e) => handleOnelinerChange(idx, e.target.value)}
                       placeholder="Oneliner text..."
-                      className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-base text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
+                      className="flex-1 min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3.5 py-2 text-base font-bold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                     />
 
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handlePlayOneliner(lineText, idx)}
-                        className="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow cursor-pointer"
+                        className="px-3.5 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow cursor-pointer"
                         title={`Play Oneliner Line ${idx + 1} on Layer 2`}
                       >
                         <Play className="w-3.5 h-3.5 fill-current" />
@@ -588,9 +588,9 @@ export default function DatabaseExplorer({
         </div>
 
         {/* COLUMN 3: TWOLINER (LAYER 2) */}
-        <div className="bg-slate-50 dark:bg-slate-950/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-slate-50 dark:bg-slate-950/90 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
           <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <FileCode className="w-4 h-4 text-blue-500 dark:text-blue-400" />
               <div>
                 <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -604,7 +604,7 @@ export default function DatabaseExplorer({
 
             <button
               onClick={handleAddTwoliner}
-              className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
+              className="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-md flex items-center gap-1 transition-all shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add</span>
@@ -628,7 +628,7 @@ export default function DatabaseExplorer({
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="X Position">
                 <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">X:</span>
                 <input
                   type="number"
@@ -639,7 +639,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Y Position">
                 <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Y:</span>
                 <input
                   type="number"
@@ -650,7 +650,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale X">
                 <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SX:</span>
                 <input
                   type="number"
@@ -661,7 +661,7 @@ export default function DatabaseExplorer({
                 />
               </div>
 
-              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
+              <div className="flex items-center justify-between gap-1 bg-white dark:bg-slate-950 px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-slate-800 shadow-xs" title="Scale Y">
                 <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">SY:</span>
                 <input
                   type="number"
@@ -679,32 +679,32 @@ export default function DatabaseExplorer({
               Loading...
             </div>
           ) : (
-            <div className="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
+            <div className="space-y-3 max-h-[560px] overflow-y-auto pr-1">
               {twolinerLines.map((item, idx) => {
                 const isActive = activeLineKey === `twoliner-${idx}`;
 
                 return (
                   <div
                     key={idx}
-                    className={`p-2.5 rounded-lg border transition-all ${
+                    className={`p-3 rounded-lg border transition-all ${
                       isActive
                         ? 'bg-cyan-50 border-cyan-400 shadow-md shadow-cyan-900/20 dark:bg-cyan-950/80 dark:border-cyan-400 dark:shadow-cyan-950 ring-1 ring-cyan-400'
                         : 'bg-white border-slate-200 hover:border-slate-300 dark:bg-slate-900/80 dark:border-slate-800 dark:hover:border-slate-700 shadow-xs'
                     }`}
                   >
                     {/* Row Header with Badge & Playout Buttons */}
-                    <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-7 text-center py-1 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
+                    <div className="flex items-center justify-between gap-1.5 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-8 text-center py-1 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs font-mono text-cyan-700 dark:text-cyan-300 font-extrabold shrink-0">
                           L{idx + 1}
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-mono italic">Name & Designation</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400 font-mono font-medium">Name & Designation</span>
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => handlePlayTwolinerRow(item, idx)}
-                          className="px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 transition-all shadow cursor-pointer"
+                          className="px-3.5 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow cursor-pointer"
                           title={`Play Twoliner Line ${idx + 1} on Layer 2`}
                         >
                           <Play className="w-3.5 h-3.5 fill-current" />
@@ -714,20 +714,20 @@ export default function DatabaseExplorer({
                     </div>
 
                     {/* 2 Stacked Input Boxes: Line 1 (Name) & Line 2 (Designation) */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-2">
                       <input
                         type="text"
                         value={item.name || ''}
                         onChange={(e) => handleTwolinerFieldChange(idx, 'name', e.target.value)}
                         placeholder="Line 1: Name..."
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-sm text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3.5 py-2 text-base font-bold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                       />
                       <input
                         type="text"
                         value={item.designation || ''}
                         onChange={(e) => handleTwolinerFieldChange(idx, 'designation', e.target.value)}
                         placeholder="Line 2: Designation..."
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-xs text-cyan-700 dark:text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500 focus:bg-white dark:focus:bg-slate-900 transition-colors"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3.5 py-2 text-sm font-semibold text-cyan-700 dark:text-cyan-300 focus:outline-none focus:border-cyan-500 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                       />
                     </div>
                   </div>

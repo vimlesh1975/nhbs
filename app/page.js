@@ -306,8 +306,8 @@ export default function BroadcastDashboard() {
         loadingScripts={loadingScripts}
       />
 
-      {/* Main Studio Container */}
-      <main className="max-w-[1800px] mx-auto px-6">
+      {/* Main Studio Container - Full Width Expansion */}
+      <main className="w-full px-3 sm:px-6">
         {/* Headlines, Script & Bulletin DataGrid Parser */}
         <DatabaseExplorer
           onSelectDataRecord={handleSelectDataRecord}
