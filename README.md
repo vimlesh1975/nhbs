@@ -107,7 +107,7 @@ SELECT Script FROM Script
 WHERE bulletinname = '0830' 
   AND LOWER(SlugName) = LOWER('headlines') 
   AND DATE(bulletindate) = '2026-08-22' 
-ORDER BY id DESC LIMIT 50;
+ORDER BY id DESC;
 ```
 For 2-line graphics, format text in MySQL with the `$$$$` delimiter:
 ```
