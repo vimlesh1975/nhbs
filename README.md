@@ -88,16 +88,19 @@ npm install
 ### 2. Configure Environment Variables (`.env.local`)
 Create `.env.local` in the project root:
 ```env
-# CasparCG Server Configuration
+# CasparCG Server Connection Settings (Default AMCP TCP Port 5250)
 CASPARCG_HOST=127.0.0.1
 CASPARCG_PORT=5250
 
-# MySQL NRCS Database Credentials
+# MySQL Database Connection Settings
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_USER=itmaint
-DB_PASSWORD=itddkchn
-DB_NAME=nrcsnew
+DB_USER=root
+DB_PASSWORD=root
+DB_NAME=casparcg_db
+
+# Mock DB Fallback Mode (true = force mock data, false = use live MySQL when available)
+USE_MOCK_DB=false
 ```
 
 ### 3. Database Schema Overview
