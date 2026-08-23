@@ -6,7 +6,13 @@
     "dev": "next dev -p 22000",
     "build": "next build",
     "start": "next start -p 22000",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop nhbs-studio",
+    "pm2:restart": "pm2 restart nhbs-studio",
+    "pm2:logs": "pm2 logs nhbs-studio",
+    "pm2:delete": "pm2 delete nhbs-studio",
+    "pm2:save": "pm2 save"
   },
   "dependencies": {
     "clsx": "^2.1.1",

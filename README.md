@@ -122,6 +122,47 @@ Open **[http://localhost:22000](http://localhost:22000)** in your web browser.
 
 ---
 
+## ⚙️ Windows PM2 Process Manager Setup
+
+The project is fully configured for zero-downtime execution with **PM2** on Windows Server / Windows 10/11.
+
+### 1. Install PM2 Globally (One-time)
+```bash
+npm install -g pm2
+```
+
+### 2. Run via Single-Click Windows Batch Files
+- **`start_pm2.bat`**: Builds the production bundle and launches NHBS Studio via PM2 in the background.
+- **`restart_pm2.bat`**: Restarts the PM2 process without downtime.
+- **`stop_pm2.bat`**: Safely stops and deregisters the PM2 background process.
+
+### 3. NPM PM2 CLI Commands
+```bash
+# Build and start with PM2
+npm run build
+npm run pm2:start
+
+# Check live process telemetry
+npx pm2 status
+
+# View live broadcast logs
+npm run pm2:logs
+
+# Restart or stop the server
+npm run pm2:restart
+npm run pm2:stop
+```
+
+### 4. Auto-Start on Windows Boot (Optional Service)
+To automatically launch the server whenever Windows boots:
+```bash
+npm install -g pm2-windows-startup
+pm2-startup install
+pm2 save
+```
+
+---
+
 ## 📡 CasparCG AMCP Command Syntax Reference
 
 This client communicates over TCP socket (`5250`) using standard AMCP commands:
