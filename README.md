@@ -1,4 +1,6 @@
-# NHBS - Newsroom Headlines & Graphics Playout Studio
+# NHBS — Newsroom Headlines & Graphics Playout Studio
+
+![NHBS Playout Studio](public/screenshot.png)
 
 A professional, high-performance Next.js application designed as a live **Newsroom Control System (NRCS) Graphics Client** for **CasparCG Broadcast Server** connected to a **MySQL NRCS Database (`nrcsnew`)**.
 
@@ -8,25 +10,35 @@ Built for television broadcast operators, newsroom directors, and MCR engineers,
 
 ## 🌟 Key Features & Architecture
 
-### 📰 1. 3-Column Newsroom Data Explorer
-- **Broadcast Date & Bulletin Selector**: Easily select broadcast dates and news bulletins from the MySQL database.
+### 🎛️ 1. Master Top Row Control Bar
+- **Leftmost Broadcast Date & News Bulletin Selectors**: Instant date selection and bulletin dropdown with a real-time **Refresh** button.
+- **Interactive Channel Number Switcher (`CH 1` / `CH 2`)**: Toggle between playout channels on the fly with live dynamic protocol routing updates (`1-2`, `1-3`, `1-4` or `2-2`, `2-3`, `2-4`).
+- **Live On-Air Layer Badges**: Active pulse indicators for **HEADLINES (L2)**, **ONELINER (L3)**, and **TWOLINER (L4)**.
+- **App-Scoped Layer Clear (`CLEAR LAYERS`)**: Stops and clears **only** layers 2, 3, and 4 on the selected channel, leaving other channel media (video clips, station bugs, tickers) completely untouched.
+- **Server Telemetry Badges**: Real-time heartbeat indicators for CasparCG Server TCP socket (`5250 LIVE` / `SIMULATION`) and MySQL Database connection (`MySQL LIVE` / `MySQL OFF`).
+- **Animated Dark / Light Mode Switcher**: Smooth theme transitions with zero-flash pre-hydration.
+
+---
+
+### 📰 2. 3-Column Parallel Newsroom Data Explorer
+- **High-Legibility Broadcast Typography**: Enlarged data input fields (`16px bold` for headlines and oneliners, `14px/12px bold` for twoliners, `14px mono` for mixer coordinates) tailored for studio monitors.
 - **HEADLINES (Layer 2)**:
   - Queries records with `SlugName = 'headlines'`.
-  - Routes playout directly to **Channel 1 — Layer 2 (`1-2`)**.
+  - Routes playout directly to **Channel X — Layer 2 (`X-2`)**.
   - Template: `http://127.0.0.1:22000/templates/headlines` (Custom transparent overlay).
 - **ONELINER (Layer 3)**:
   - Queries records with `SlugName = 'oneliner'`.
-  - Routes playout directly to **Channel 1 — Layer 3 (`1-3`)**.
+  - Routes playout directly to **Channel X — Layer 3 (`X-3`)**.
   - Template: `http://127.0.0.1:22000/templates/oneliner` (Dark glassmorphism background strip bar).
 - **TWOLINER (Layer 4)**:
   - Queries records with `SlugName = 'twoliner'`.
   - Automatically parses `Name $$$$ Designation` format into stacked Line 1 (Name) & Line 2 (Designation) editable fields.
-  - Routes playout directly to **Channel 1 — Layer 4 (`1-4`)**.
+  - Routes playout directly to **Channel X — Layer 4 (`X-4`)**.
   - Template: `http://127.0.0.1:22000/templates/twoliner` (2-line animated lower third strip).
 
 ---
 
-### 🎛️ 2. Real-Time Live AMCP Mixer Controls
+### 📐 3. Real-Time Live AMCP Mixer Controls
 - **4-DOF Layer Manipulation** for Layer 2, Layer 3, and Layer 4:
   - **X**: Horizontal position offset (`0.01` step).
   - **Y**: Vertical position offset (`0.01` step).
@@ -36,20 +48,21 @@ Built for television broadcast operators, newsroom directors, and MCR engineers,
   ```amcp
   MIXER 1-2 FILL 0.05 -0.02 0.95 0.95
   ```
-- **RST Button**: Instantly resets positioning and issues `MIXER 1-X CLEAR`.
-- **Persistent Settings**: All Mixer parameters auto-save to browser `localStorage` and persist across page reloads.
+- **RST Button**: Instantly resets positioning and issues `MIXER X-Y CLEAR`.
 
 ---
 
-### 📡 3. Multi-Layer Playout Routing & Protection
-- **Multi-Layer Matrix Badges**: Live visual indicators showing **ON AIR** state for **HEADLINES (L2)**, **ONELINER (L3)**, and **TWOLINER (L4)**.
-- **App-Scoped Clear Action**:
-  - **CLEAR APP LAYERS (L2, L3, L4)** stops and clears **ONLY** layers 2, 3, and 4 used by this client application.
-  - External channel media (video clips, channel logos, tickers on other layers) remain 100% active and untouched.
+### 💾 4. Complete `localStorage` State Persistence
+All operator settings persist across browser restarts and page refreshes:
+- Selected Broadcast Date (`casparcg_selected_date`)
+- Selected News Bulletin (`casparcg_selected_bulletin`)
+- Active Channel Selection (`casparcg_selected_channel`)
+- 4-DOF Layer Mixer Transforms (`casparcg_mixer_pos`)
+- UI Theme Mode (`casparcg_theme`)
 
 ---
 
-### 🎨 4. Broadcast Alpha Fill & Key HTML Templates
+### 🎨 5. Broadcast Alpha Fill & Key HTML Templates
 - Fully transparent HTML alpha canvas (`1920x1080`) optimized for CasparCG SDI / NDI fill & key output.
 - Smooth CSS animations, clean typography, glassmorphism aesthetics, and native CasparCG HTML Template API (`window.play()`, `window.stop()`, `window.update()`).
 
@@ -142,26 +155,23 @@ nhbs/
 │   │   ├── casparcg/        # AMCP TCP socket bridge route handler
 │   │   └── db/              # MySQL script and bulletin query APIs
 │   ├── templates/
-│   │   ├── lower-third/     # Headlines single-line overlay template
+│   │   ├── headlines/       # Headlines single-line overlay template
 │   │   ├── oneliner/        # Dark glassmorphism strip template
 │   │   └── twoliner/        # 2-line Name & Designation graphic template
-│   ├── globals.css          # Transparent html/body broadcast styles
-│   ├── layout.js            # Root layout
+│   ├── globals.css          # Broadcast CSS & Dark/Light mode styles
+│   ├── layout.js            # Root layout with theme anti-flicker script
 │   └── page.js              # Master Playout Controller
 ├── components/
-│   ├── ChannelMatrix.jsx    # Live ON AIR layer status badge matrix
-│   ├── DatabaseExplorer.jsx # 3-Column Newsroom Deck & Mixer controls
-│   ├── Header.jsx           # CasparCG TCP connection indicator
-│   └── AmcpConsole.jsx      # Real-time AMCP telemetry command log
-├── lib/
-│   ├── casparcg.js          # Net Socket TCP connection helper
-│   └── db.js                # mysql2 connection pool
-├── package.json
-└── README.md
+│   ├── Header.jsx           # Top master toolbar (Date, Bulletin, CH Switcher, Status)
+│   ├── DatabaseExplorer.jsx # 3-Column script data deck with Mixer controls
+│   ├── ThemeToggle.jsx      # Animated Dark / Light theme switch
+│   └── LivePreviewModal.jsx # Web graphics preview modal
+├── public/
+│   └── screenshot.png       # Application UI screenshot
+└── package.json
 ```
 
 ---
 
 ## 📜 License
-
-Distributed under the MIT License.
+MIT License. Built for broadcast graphics workflows.

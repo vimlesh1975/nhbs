@@ -5,17 +5,12 @@ import { Calendar, Radio, FileCode, Play, Plus, Radio as RadioIcon, Sliders, Ref
 export default function DatabaseExplorer({ 
   onSelectDataRecord, 
   activeRecordId,
-  selectedDate: parentDate,
-  setSelectedDate: setParentDate,
-  onExecuteAction
+  selectedDate,
+  selectedBulletin,
+  onExecuteAction,
+  refreshTrigger,
+  setLoadingScripts
 }) {
-  const [internalDate, setInternalDate] = useState(() => new Date().toISOString().split('T')[0]);
-  const selectedDate = parentDate !== undefined ? parentDate : internalDate;
-  const setSelectedDate = setParentDate || setInternalDate;
-
-  const [selectedBulletin, setSelectedBulletin] = useState('');
-  const [bulletinOptions, setBulletinOptions] = useState([]);
-  
   // States for Headlines, Oneliner, and Twoliner scripts
   const [headlineLines, setHeadlineLines] = useState(['']);
   const [onelinerLines, setOnelinerLines] = useState(['']);
@@ -47,20 +42,6 @@ export default function DatabaseExplorer({
     }
   }, [mixerPos]);
 
-  // Fetch dropdown options from bulletin table & auto-select first bulletin
-  const fetchOptions = async () => {
-    try {
-      const res = await fetch('/api/db/options');
-      const json = await res.json();
-      if (json.success && json.bulletins && json.bulletins.length > 0) {
-        setBulletinOptions(json.bulletins);
-        setSelectedBulletin(prev => prev || json.bulletins[0].title);
-      }
-    } catch (err) {
-      console.error("Fetch options error:", err);
-    }
-  };
-
   // Fetch Script text for HEADLINES, ONELINER, and TWOLINER
   const fetchScripts = async () => {
     if (!selectedBulletin || !selectedDate) {
@@ -70,6 +51,7 @@ export default function DatabaseExplorer({
       return;
     }
     setLoading(true);
+    if (setLoadingScripts) setLoadingScripts(true);
     try {
       // 1. Fetch Headlines (SlugName = 'headlines')
       const resHeadlines = await fetch(`/api/db/script?bulletin=${encodeURIComponent(selectedBulletin)}&date=${encodeURIComponent(selectedDate)}&slug=headlines`);
@@ -114,21 +96,13 @@ export default function DatabaseExplorer({
       setTwolinerLines([{ name: '', designation: '' }]);
     } finally {
       setLoading(false);
+      if (setLoadingScripts) setLoadingScripts(false);
     }
   };
 
   useEffect(() => {
-    fetchOptions();
-  }, []);
-
-  useEffect(() => {
     fetchScripts();
-  }, [selectedDate, selectedBulletin]);
-
-  const setTodayDate = () => {
-    const today = new Date().toISOString().split('T')[0];
-    setSelectedDate(today);
-  };
+  }, [selectedDate, selectedBulletin, refreshTrigger]);
 
   // Handlers for Headlines
   const handleHeadlineChange = (index, value) => {
@@ -235,71 +209,6 @@ export default function DatabaseExplorer({
 
   return (
     <div className="glass-panel p-5 mb-6 border-l-4 border-l-cyan-400 bg-white/90 dark:bg-slate-950/80 transition-colors duration-200">
-      {/* SIDE-BY-SIDE CONTROL BAR: Date Selector + News Bulletin Combo Box */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 bg-slate-50 dark:bg-slate-900/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md">
-        {/* 1. Date Selector */}
-        <div>
-          <label className="block text-xs font-bold text-cyan-700 dark:text-cyan-300 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
-            <Calendar className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
-            <span>1. Broadcast Date Selector</span>
-          </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="date"
-              value={selectedDate || ''}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              onClick={(e) => {
-                try { if (e.target.showPicker) e.target.showPicker(); } catch (err) {}
-              }}
-              onFocus={(e) => {
-                try { if (e.target.showPicker) e.target.showPicker(); } catch (err) {}
-              }}
-              className="flex-1 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-semibold text-slate-900 dark:text-white font-mono focus:outline-none focus:border-cyan-400 cursor-pointer shadow-xs"
-            />
-            <button
-              onClick={setTodayDate}
-              className={`px-3.5 py-2 rounded-lg text-xs font-bold border transition-all ${
-                selectedDate === new Date().toISOString().split('T')[0]
-                  ? 'bg-cyan-600 border-cyan-400 text-white shadow'
-                  : 'bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs'
-              }`}
-            >
-              Today
-            </button>
-          </div>
-        </div>
-
-        {/* 2. News Bulletin Combo Box */}
-        <div>
-          <label className="block text-xs font-bold text-cyan-700 dark:text-cyan-300 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
-            <Radio className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
-            <span>2. News Bulletin (bulletin Table)</span>
-          </label>
-          <select
-            value={selectedBulletin}
-            onChange={(e) => setSelectedBulletin(e.target.value)}
-            className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-500 shadow-xs"
-          >
-            <option value="">-- Select News Bulletin --</option>
-            {bulletinOptions.map((b, idx) => (
-              <option key={idx} value={b.title}>
-                {b.title} {b.bulletintime ? `(${b.bulletintime})` : ''}
-              </option>
-            ))}
-          </select>
-          <button
-            type="button"
-            onClick={fetchScripts}
-            disabled={loading || !selectedDate || !selectedBulletin}
-            className="mt-2 w-full px-3 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow"
-            title="Refresh scripts for the selected date and bulletin"
-          >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            <span>{loading ? 'Refreshing...' : 'Refresh Scripts'}</span>
-          </button>
-        </div>
-      </div>
-
       {/* 3-COLUMN SIDE-BY-SIDE GRID: HEADLINES (LAYER 2) | ONELINER (LAYER 3) | TWOLINER (LAYER 4) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* COLUMN 1: HEADLINES (LAYER 2) */}

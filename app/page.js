@@ -13,11 +13,92 @@ export default function BroadcastDashboard() {
   const [casparConnected, setCasparConnected] = useState(false);
   const [dbStatus, setDbStatus] = useState({ connected: false, isMock: true });
 
-  // Global Date Selector State (Default Today's Date)
-  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
+  // Global Date Selector State (Persistent in localStorage)
+  const [selectedDate, setSelectedDate] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('casparcg_selected_date');
+        if (saved) return saved;
+      } catch (e) {}
+    }
+    return new Date().toISOString().split('T')[0];
+  });
 
-  // Playout Routing
-  const [channel, setChannel] = useState(1);
+  // Save selectedDate to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined' && selectedDate) {
+      try {
+        localStorage.setItem('casparcg_selected_date', selectedDate);
+      } catch (e) {}
+    }
+  }, [selectedDate]);
+
+  // Global Bulletin State (Persistent in localStorage)
+  const [selectedBulletin, setSelectedBulletin] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('casparcg_selected_bulletin');
+        if (saved) return saved;
+      } catch (e) {}
+    }
+    return '';
+  });
+
+  // Save selectedBulletin to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined' && selectedBulletin) {
+      try {
+        localStorage.setItem('casparcg_selected_bulletin', selectedBulletin);
+      } catch (e) {}
+    }
+  }, [selectedBulletin]);
+
+  const [bulletinOptions, setBulletinOptions] = useState([]);
+  const [loadingScripts, setLoadingScripts] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Fetch Bulletin dropdown options and restore saved bulletin
+  const fetchBulletinOptions = async () => {
+    try {
+      const res = await fetch('/api/db/options');
+      const json = await res.json();
+      if (json.success && json.bulletins && json.bulletins.length > 0) {
+        setBulletinOptions(json.bulletins);
+        const saved = typeof window !== 'undefined' ? localStorage.getItem('casparcg_selected_bulletin') : null;
+        setSelectedBulletin(prev => {
+          if (prev && json.bulletins.some(b => b.title === prev)) return prev;
+          if (saved && json.bulletins.some(b => b.title === saved)) return saved;
+          return json.bulletins[0].title;
+        });
+      }
+    } catch (err) {
+      console.error("Fetch bulletin options error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBulletinOptions();
+  }, []);
+
+  // Playout Channel Routing (Persistent in localStorage)
+  const [channel, setChannel] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('casparcg_selected_channel');
+        if (saved) return parseInt(saved, 10) || 1;
+      } catch (e) {}
+    }
+    return 1;
+  });
+
+  // Save channel to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined' && channel) {
+      try {
+        localStorage.setItem('casparcg_selected_channel', channel.toString());
+      } catch (e) {}
+    }
+  }, [channel]);
   const [layer, setLayer] = useState(2);
   const [selectedTemplate, setSelectedTemplate] = useState('headlines');
   const [activeRecordId, setActiveRecordId] = useState(null);
@@ -196,7 +277,7 @@ export default function BroadcastDashboard() {
 
   return (
     <div className="min-h-screen pb-12 bg-slate-100 text-slate-900 dark:bg-[#070a12] dark:text-slate-100 transition-colors duration-200">
-      {/* Header Bar with Integrated Channel Matrix */}
+      {/* Header Bar with Integrated Channel Matrix & Date/Bulletin Controls */}
       <Header
         casparConnected={casparConnected}
         dbStatus={dbStatus}
@@ -207,8 +288,16 @@ export default function BroadcastDashboard() {
         casparPort={casparPort}
         setCasparPort={setCasparPort}
         channel={channel}
+        setChannel={setChannel}
         activeLayers={activeLayers}
         onClearChannel={handleClearChannel}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        selectedBulletin={selectedBulletin}
+        setSelectedBulletin={setSelectedBulletin}
+        bulletinOptions={bulletinOptions}
+        onRefreshScripts={() => setRefreshTrigger(prev => prev + 1)}
+        loadingScripts={loadingScripts}
       />
 
       {/* Main Studio Container */}
@@ -219,7 +308,11 @@ export default function BroadcastDashboard() {
           activeRecordId={activeRecordId}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          selectedBulletin={selectedBulletin}
+          setSelectedBulletin={setSelectedBulletin}
           onExecuteAction={handleExecuteAction}
+          refreshTrigger={refreshTrigger}
+          setLoadingScripts={setLoadingScripts}
         />
       </main>
 
