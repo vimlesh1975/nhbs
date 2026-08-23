@@ -79,8 +79,8 @@ export default function OnelinerDataStripTemplate() {
       {displayText && (
         <div style={{
           position: 'absolute',
-          bottom: '175px',
-          left: '100px',
+          bottom: '180px',
+          left: '50px',
           transform: transformVal,
           opacity: opacityVal,
           transition: animState === 'idle' ? 'none' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease',
@@ -95,8 +95,8 @@ export default function OnelinerDataStripTemplate() {
           flexDirection: 'column',
           justifyContent: 'center',
           gap: '4px',
-          maxWidth: '1650px',
-          minWidth: '1650px'
+          maxWidth: '1800px',
+          minWidth: '1800px'
         }}>
           <span style={{
             color: '#000000',
