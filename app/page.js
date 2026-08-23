@@ -84,9 +84,24 @@ export default function BroadcastDashboard() {
           if (saved && json.bulletins.some(b => b.title === saved)) return saved;
           return json.bulletins[0].title;
         });
+      } else {
+        const fallbacks = [
+          { title: '0830', bulletintime: '08:30:00' },
+          { title: '1200', bulletintime: '12:00:00' },
+          { title: '1900', bulletintime: '19:00:00' }
+        ];
+        setBulletinOptions(fallbacks);
+        setSelectedBulletin(prev => prev || '0830');
       }
     } catch (err) {
       console.error("Fetch bulletin options error:", err);
+      const fallbacks = [
+        { title: '0830', bulletintime: '08:30:00' },
+        { title: '1200', bulletintime: '12:00:00' },
+        { title: '1900', bulletintime: '19:00:00' }
+      ];
+      setBulletinOptions(fallbacks);
+      setSelectedBulletin(prev => prev || '0830');
     }
   };
 

@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import { FileCode, Play, Plus, Radio as RadioIcon, Sliders, Square } from 'lucide-react';
 
+const DEFAULT_SAMPLE_TEXT = "This is test data. \u0939\u093e \u091a\u093e\u091a\u0923\u0940 \u0921\u0947\u091f\u093e \u0906\u0939\u0947.";
+
 export default function DatabaseExplorer({ 
   onSelectDataRecord, 
   activeRecordId,
@@ -11,10 +13,22 @@ export default function DatabaseExplorer({
   refreshTrigger,
   setLoadingScripts
 }) {
-  // States for Headlines, Oneliner, and Twoliner scripts
-  const [headlineLines, setHeadlineLines] = useState(['']);
-  const [onelinerLines, setOnelinerLines] = useState(['']);
-  const [twolinerLines, setTwolinerLines] = useState([{ name: '', designation: '' }]);
+  // States for Headlines, Oneliner, and Twoliner scripts with bilingual test data defaults
+  const [headlineLines, setHeadlineLines] = useState([
+    `${DEFAULT_SAMPLE_TEXT} 1`,
+    `${DEFAULT_SAMPLE_TEXT} 2`,
+    `${DEFAULT_SAMPLE_TEXT} 3`
+  ]);
+  const [onelinerLines, setOnelinerLines] = useState([
+    `${DEFAULT_SAMPLE_TEXT} 1`,
+    `${DEFAULT_SAMPLE_TEXT} 2`,
+    `${DEFAULT_SAMPLE_TEXT} 3`
+  ]);
+  const [twolinerLines, setTwolinerLines] = useState([
+    { name: DEFAULT_SAMPLE_TEXT, designation: DEFAULT_SAMPLE_TEXT },
+    { name: `${DEFAULT_SAMPLE_TEXT} 2`, designation: `${DEFAULT_SAMPLE_TEXT} 2` },
+    { name: `${DEFAULT_SAMPLE_TEXT} 3`, designation: `${DEFAULT_SAMPLE_TEXT} 3` }
+  ]);
   const [loading, setLoading] = useState(false);
   const [activeLineKey, setActiveLineKey] = useState(null);
 
@@ -52,56 +66,61 @@ export default function DatabaseExplorer({
 
   // Fetch Script text for HEADLINES, ONELINER, and TWOLINER
   const fetchScripts = async () => {
-    if (!selectedBulletin || !selectedDate) {
-      setHeadlineLines(['']);
-      setOnelinerLines(['']);
-      setTwolinerLines([{ name: '', designation: '' }]);
-      return;
-    }
     setLoading(true);
     if (setLoadingScripts) setLoadingScripts(true);
     try {
+      const targetBulletin = selectedBulletin || '0830';
+      const targetDate = selectedDate || new Date().toISOString().split('T')[0];
+
       // 1. Fetch Headlines (SlugName = 'headlines')
-      const resHeadlines = await fetch(`/api/db/script?bulletin=${encodeURIComponent(selectedBulletin)}&date=${encodeURIComponent(selectedDate)}&slug=headlines`);
+      const resHeadlines = await fetch(`/api/db/script?bulletin=${encodeURIComponent(targetBulletin)}&date=${encodeURIComponent(targetDate)}&slug=headlines`);
       const jsonHeadlines = await resHeadlines.json();
-      if (jsonHeadlines.success && jsonHeadlines.script) {
+      if (jsonHeadlines && jsonHeadlines.script) {
         const parsed = jsonHeadlines.script.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-        setHeadlineLines(parsed.length > 0 ? parsed : ['']);
+        setHeadlineLines(parsed.length > 0 ? parsed : [DEFAULT_SAMPLE_TEXT]);
       } else {
-        setHeadlineLines(['']);
+        setHeadlineLines([`${DEFAULT_SAMPLE_TEXT} 1`, `${DEFAULT_SAMPLE_TEXT} 2`, `${DEFAULT_SAMPLE_TEXT} 3`]);
       }
 
       // 2. Fetch Oneliner (SlugName = 'oneliner')
-      const resOneliner = await fetch(`/api/db/script?bulletin=${encodeURIComponent(selectedBulletin)}&date=${encodeURIComponent(selectedDate)}&slug=oneliner`);
+      const resOneliner = await fetch(`/api/db/script?bulletin=${encodeURIComponent(targetBulletin)}&date=${encodeURIComponent(targetDate)}&slug=oneliner`);
       const jsonOneliner = await resOneliner.json();
-      if (jsonOneliner.success && jsonOneliner.script) {
+      if (jsonOneliner && jsonOneliner.script) {
         const parsed = jsonOneliner.script.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-        setOnelinerLines(parsed.length > 0 ? parsed : ['']);
+        setOnelinerLines(parsed.length > 0 ? parsed : [DEFAULT_SAMPLE_TEXT]);
       } else {
-        setOnelinerLines(['']);
+        setOnelinerLines([`${DEFAULT_SAMPLE_TEXT} 1`, `${DEFAULT_SAMPLE_TEXT} 2`, `${DEFAULT_SAMPLE_TEXT} 3`]);
       }
 
       // 3. Fetch Twoliner (SlugName = 'twoliner')
-      const resTwoliner = await fetch(`/api/db/script?bulletin=${encodeURIComponent(selectedBulletin)}&date=${encodeURIComponent(selectedDate)}&slug=twoliner`);
+      const resTwoliner = await fetch(`/api/db/script?bulletin=${encodeURIComponent(targetBulletin)}&date=${encodeURIComponent(targetDate)}&slug=twoliner`);
       const jsonTwoliner = await resTwoliner.json();
-      if (jsonTwoliner.success && jsonTwoliner.script) {
+      if (jsonTwoliner && jsonTwoliner.script) {
         const parsed = jsonTwoliner.script.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         const twolinerObjects = parsed.map(line => {
           if (line.includes('$$$$')) {
             const parts = line.split('$$$$');
             return { name: parts[0].trim(), designation: parts[1].trim() };
           }
-          return { name: line, designation: '' };
+          return { name: line, designation: DEFAULT_SAMPLE_TEXT };
         });
-        setTwolinerLines(twolinerObjects.length > 0 ? twolinerObjects : [{ name: '', designation: '' }]);
+        setTwolinerLines(twolinerObjects.length > 0 ? twolinerObjects : [{ name: DEFAULT_SAMPLE_TEXT, designation: DEFAULT_SAMPLE_TEXT }]);
       } else {
-        setTwolinerLines([{ name: '', designation: '' }]);
+        setTwolinerLines([
+          { name: DEFAULT_SAMPLE_TEXT, designation: DEFAULT_SAMPLE_TEXT },
+          { name: `${DEFAULT_SAMPLE_TEXT} 2`, designation: `${DEFAULT_SAMPLE_TEXT} 2` },
+          { name: `${DEFAULT_SAMPLE_TEXT} 3`, designation: `${DEFAULT_SAMPLE_TEXT} 3` }
+        ]);
       }
     } catch (err) {
-      console.error("Fetch scripts error:", err);
-      setHeadlineLines(['']);
-      setOnelinerLines(['']);
-      setTwolinerLines([{ name: '', designation: '' }]);
+      console.error("Fetch scripts error, populating fallback test data:", err);
+      setHeadlineLines([`${DEFAULT_SAMPLE_TEXT} 1`, `${DEFAULT_SAMPLE_TEXT} 2`, `${DEFAULT_SAMPLE_TEXT} 3`]);
+      setOnelinerLines([`${DEFAULT_SAMPLE_TEXT} 1`, `${DEFAULT_SAMPLE_TEXT} 2`, `${DEFAULT_SAMPLE_TEXT} 3`]);
+      setTwolinerLines([
+        { name: DEFAULT_SAMPLE_TEXT, designation: DEFAULT_SAMPLE_TEXT },
+        { name: `${DEFAULT_SAMPLE_TEXT} 2`, designation: `${DEFAULT_SAMPLE_TEXT} 2` },
+        { name: `${DEFAULT_SAMPLE_TEXT} 3`, designation: `${DEFAULT_SAMPLE_TEXT} 3` }
+      ]);
     } finally {
       setLoading(false);
       if (setLoadingScripts) setLoadingScripts(false);
@@ -120,7 +139,7 @@ export default function DatabaseExplorer({
   };
 
   const handleAddHeadline = () => {
-    setHeadlineLines(prev => [...prev, '']);
+    setHeadlineLines(prev => [...prev, DEFAULT_SAMPLE_TEXT]);
   };
 
   // Handlers for Oneliner
@@ -131,7 +150,7 @@ export default function DatabaseExplorer({
   };
 
   const handleAddOneliner = () => {
-    setOnelinerLines(prev => [...prev, '']);
+    setOnelinerLines(prev => [...prev, DEFAULT_SAMPLE_TEXT]);
   };
 
   // Handlers for Twoliner fields (Name & Designation)
@@ -142,7 +161,7 @@ export default function DatabaseExplorer({
   };
 
   const handleAddTwoliner = () => {
-    setTwolinerLines(prev => [...prev, { name: '', designation: '' }]);
+    setTwolinerLines(prev => [...prev, { name: DEFAULT_SAMPLE_TEXT, designation: DEFAULT_SAMPLE_TEXT }]);
   };
 
   // Mixer X, Y, ScaleX, and ScaleY Handlers for Layer 2 - Auto-sends LIVE while changing
@@ -187,10 +206,10 @@ export default function DatabaseExplorer({
     const lineKey = `headline-${index}`;
     setActiveLineKey(lineKey);
 
-    const linePayload = { f0: lineText };
+    const linePayload = { f0: lineText || DEFAULT_SAMPLE_TEXT };
 
     if (onSelectDataRecord) {
-      onSelectDataRecord('headlines', linePayload, lineText, lineKey);
+      onSelectDataRecord('headlines', linePayload, lineText || DEFAULT_SAMPLE_TEXT, lineKey);
     }
     if (onExecuteAction) {
       onExecuteAction('ADD_PLAY', '', linePayload, 'headlines', 2);
@@ -202,10 +221,10 @@ export default function DatabaseExplorer({
     const lineKey = `oneliner-${index}`;
     setActiveLineKey(lineKey);
 
-    const linePayload = { f0: lineText };
+    const linePayload = { f0: lineText || DEFAULT_SAMPLE_TEXT };
 
     if (onSelectDataRecord) {
-      onSelectDataRecord('oneliner', linePayload, lineText, lineKey);
+      onSelectDataRecord('oneliner', linePayload, lineText || DEFAULT_SAMPLE_TEXT, lineKey);
     }
     if (onExecuteAction) {
       onExecuteAction('ADD_PLAY', '', linePayload, 'oneliner', 2);
@@ -218,12 +237,12 @@ export default function DatabaseExplorer({
     setActiveLineKey(lineKey);
 
     const linePayload = {
-      f0: item.name || '',
-      f1: item.designation || ''
+      f0: item.name || DEFAULT_SAMPLE_TEXT,
+      f1: item.designation || DEFAULT_SAMPLE_TEXT
     };
 
     if (onSelectDataRecord) {
-      onSelectDataRecord('twoliner', linePayload, item.name, lineKey);
+      onSelectDataRecord('twoliner', linePayload, item.name || DEFAULT_SAMPLE_TEXT, lineKey);
     }
     if (onExecuteAction) {
       onExecuteAction('ADD_PLAY', '', linePayload, 'twoliner', 2);
@@ -373,7 +392,7 @@ export default function DatabaseExplorer({
                       type="text"
                       value={lineText}
                       onChange={(e) => handleHeadlineChange(idx, e.target.value)}
-                      placeholder={`Headline ${idx + 1}...`}
+                      placeholder="Headline text..."
                       className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-base text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                     />
 
@@ -444,7 +463,7 @@ export default function DatabaseExplorer({
                       type="text"
                       value={lineText}
                       onChange={(e) => handleOnelinerChange(idx, e.target.value)}
-                      placeholder={`Oneliner ${idx + 1}...`}
+                      placeholder="Oneliner text..."
                       className="flex-1 min-w-[100px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-base text-slate-900 dark:text-white font-bold focus:outline-none focus:border-cyan-400 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                     />
 
