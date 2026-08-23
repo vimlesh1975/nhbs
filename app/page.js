@@ -13,45 +13,59 @@ export default function BroadcastDashboard() {
   const [casparConnected, setCasparConnected] = useState(false);
   const [dbStatus, setDbStatus] = useState({ connected: false, isMock: true });
 
-  // Global Date Selector State (Persistent in localStorage)
-  const [selectedDate, setSelectedDate] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('casparcg_selected_date');
-        if (saved) return saved;
-      } catch (e) {}
-    }
-    return new Date().toISOString().split('T')[0];
-  });
+  // Client mount tracking for SSR hydration safety
+  const [mounted, setMounted] = useState(false);
+
+  // Global Date Selector State (Consistent SSR initial state)
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
+
+  // Global Bulletin State
+  const [selectedBulletin, setSelectedBulletin] = useState('');
+
+  // Playout Channel Routing
+  const [channel, setChannel] = useState(1);
+
+  // Restore persisted settings from localStorage safely after client mount
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const savedDate = localStorage.getItem('casparcg_selected_date');
+      if (savedDate) setSelectedDate(savedDate);
+
+      const savedChannel = localStorage.getItem('casparcg_selected_channel');
+      if (savedChannel) setChannel(parseInt(savedChannel, 10) || 1);
+
+      const savedBulletin = localStorage.getItem('casparcg_selected_bulletin');
+      if (savedBulletin) setSelectedBulletin(savedBulletin);
+    } catch (e) {}
+  }, []);
 
   // Save selectedDate to localStorage
   useEffect(() => {
-    if (typeof window !== 'undefined' && selectedDate) {
+    if (mounted && selectedDate) {
       try {
         localStorage.setItem('casparcg_selected_date', selectedDate);
       } catch (e) {}
     }
-  }, [selectedDate]);
-
-  // Global Bulletin State (Persistent in localStorage)
-  const [selectedBulletin, setSelectedBulletin] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('casparcg_selected_bulletin');
-        if (saved) return saved;
-      } catch (e) {}
-    }
-    return '';
-  });
+  }, [selectedDate, mounted]);
 
   // Save selectedBulletin to localStorage
   useEffect(() => {
-    if (typeof window !== 'undefined' && selectedBulletin) {
+    if (mounted && selectedBulletin) {
       try {
         localStorage.setItem('casparcg_selected_bulletin', selectedBulletin);
       } catch (e) {}
     }
-  }, [selectedBulletin]);
+  }, [selectedBulletin, mounted]);
+
+  // Save channel to localStorage
+  useEffect(() => {
+    if (mounted && channel) {
+      try {
+        localStorage.setItem('casparcg_selected_channel', channel.toString());
+      } catch (e) {}
+    }
+  }, [channel, mounted]);
 
   const [bulletinOptions, setBulletinOptions] = useState([]);
   const [loadingScripts, setLoadingScripts] = useState(false);
@@ -80,25 +94,6 @@ export default function BroadcastDashboard() {
     fetchBulletinOptions();
   }, []);
 
-  // Playout Channel Routing (Persistent in localStorage)
-  const [channel, setChannel] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('casparcg_selected_channel');
-        if (saved) return parseInt(saved, 10) || 1;
-      } catch (e) {}
-    }
-    return 1;
-  });
-
-  // Save channel to localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined' && channel) {
-      try {
-        localStorage.setItem('casparcg_selected_channel', channel.toString());
-      } catch (e) {}
-    }
-  }, [channel]);
   const [layer, setLayer] = useState(2);
   const [selectedTemplate, setSelectedTemplate] = useState('headlines');
   const [activeRecordId, setActiveRecordId] = useState(null);

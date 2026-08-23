@@ -18,29 +18,32 @@ export default function DatabaseExplorer({
   const [loading, setLoading] = useState(false);
   const [activeLineKey, setActiveLineKey] = useState(null);
 
-  // Mixer Position & Scale States for Layer 2, Layer 3, Layer 4 (Persistent in localStorage)
-  const [mixerPos, setMixerPos] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('casparcg_mixer_pos');
-        if (saved) return JSON.parse(saved);
-      } catch (err) {}
-    }
-    return {
-      2: { x: 0, y: 0, scaleX: 1, scaleY: 1 },
-      3: { x: 0, y: 0, scaleX: 1, scaleY: 1 },
-      4: { x: 0, y: 0, scaleX: 1, scaleY: 1 }
-    };
+  const [mounted, setMounted] = useState(false);
+
+  // Mixer Position & Scale States for Layer 2, Layer 3, Layer 4 (Consistent SSR initial state)
+  const [mixerPos, setMixerPos] = useState({
+    2: { x: 0, y: 0, scaleX: 1, scaleY: 1 },
+    3: { x: 0, y: 0, scaleX: 1, scaleY: 1 },
+    4: { x: 0, y: 0, scaleX: 1, scaleY: 1 }
   });
 
-  // Save mixerPos state to localStorage on change
+  // Restore mixer position safely after client mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    setMounted(true);
+    try {
+      const saved = localStorage.getItem('casparcg_mixer_pos');
+      if (saved) setMixerPos(JSON.parse(saved));
+    } catch (err) {}
+  }, []);
+
+  // Save mixerPos state to localStorage on change once mounted
+  useEffect(() => {
+    if (mounted && mixerPos) {
       try {
         localStorage.setItem('casparcg_mixer_pos', JSON.stringify(mixerPos));
       } catch (err) {}
     }
-  }, [mixerPos]);
+  }, [mixerPos, mounted]);
 
   // Fetch Script text for HEADLINES, ONELINER, and TWOLINER
   const fetchScripts = async () => {
