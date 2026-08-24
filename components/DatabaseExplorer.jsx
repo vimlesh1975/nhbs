@@ -68,10 +68,19 @@ export default function DatabaseExplorer({
 
   // Fetch Script text for HEADLINES, ONELINER, and TWOLINER
   const fetchScripts = async () => {
+    if (!selectedBulletin) {
+      setLoading(false);
+      if (setLoadingScripts) setLoadingScripts(false);
+      setHeadlineLines([]);
+      setOnelinerLines([]);
+      setTwolinerLines([]);
+      return;
+    }
+
     setLoading(true);
     if (setLoadingScripts) setLoadingScripts(true);
     try {
-      const targetBulletin = selectedBulletin || '0830';
+      const targetBulletin = selectedBulletin;
       const targetDate = selectedDate || new Date().toISOString().split('T')[0];
 
       // 1. Fetch Headlines (SlugName = 'headlines')
@@ -410,6 +419,10 @@ export default function DatabaseExplorer({
             <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
             </div>
+          ) : !selectedBulletin ? (
+            <div className="p-6 text-center text-slate-500 dark:text-slate-400 text-xs font-semibold border border-dashed border-slate-300 dark:border-slate-800 rounded-lg bg-slate-100/50 dark:bg-slate-900/50">
+              Please select a News Bulletin to load Headlines data.
+            </div>
           ) : (
             <div className="space-y-2.5 max-h-[560px] overflow-y-auto pr-1">
               {headlineLines.map((lineText, idx) => {
@@ -544,6 +557,10 @@ export default function DatabaseExplorer({
             <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
             </div>
+          ) : !selectedBulletin ? (
+            <div className="p-6 text-center text-slate-500 dark:text-slate-400 text-xs font-semibold border border-dashed border-slate-300 dark:border-slate-800 rounded-lg bg-slate-100/50 dark:bg-slate-900/50">
+              Please select a News Bulletin to load Oneliner data.
+            </div>
           ) : (
             <div className="space-y-2.5 max-h-[560px] overflow-y-auto pr-1">
               {onelinerLines.map((lineText, idx) => {
@@ -677,6 +694,10 @@ export default function DatabaseExplorer({
           {loading ? (
             <div className="p-4 text-center text-slate-500 text-sm font-mono">
               Loading...
+            </div>
+          ) : !selectedBulletin ? (
+            <div className="p-6 text-center text-slate-500 dark:text-slate-400 text-xs font-semibold border border-dashed border-slate-300 dark:border-slate-800 rounded-lg bg-slate-100/50 dark:bg-slate-900/50">
+              Please select a News Bulletin to load Twoliner data.
             </div>
           ) : (
             <div className="space-y-3 max-h-[560px] overflow-y-auto pr-1">

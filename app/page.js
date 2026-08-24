@@ -82,7 +82,7 @@ export default function BroadcastDashboard() {
         setSelectedBulletin(prev => {
           if (prev && json.bulletins.some(b => b.title === prev)) return prev;
           if (saved && json.bulletins.some(b => b.title === saved)) return saved;
-          return json.bulletins[0].title;
+          return '';
         });
       } else {
         const fallbacks = [
@@ -91,7 +91,12 @@ export default function BroadcastDashboard() {
           { title: '1900', bulletintime: '19:00:00' }
         ];
         setBulletinOptions(fallbacks);
-        setSelectedBulletin(prev => prev || '0830');
+        setSelectedBulletin(prev => {
+          if (prev && fallbacks.some(b => b.title === prev)) return prev;
+          const saved = typeof window !== 'undefined' ? localStorage.getItem('casparcg_selected_bulletin') : null;
+          if (saved && fallbacks.some(b => b.title === saved)) return saved;
+          return '';
+        });
       }
     } catch (err) {
       console.error("Fetch bulletin options error:", err);
@@ -101,7 +106,12 @@ export default function BroadcastDashboard() {
         { title: '1900', bulletintime: '19:00:00' }
       ];
       setBulletinOptions(fallbacks);
-      setSelectedBulletin(prev => prev || '0830');
+      setSelectedBulletin(prev => {
+        if (prev && fallbacks.some(b => b.title === prev)) return prev;
+        const saved = typeof window !== 'undefined' ? localStorage.getItem('casparcg_selected_bulletin') : null;
+        if (saved && fallbacks.some(b => b.title === saved)) return saved;
+        return '';
+      });
     }
   };
 
