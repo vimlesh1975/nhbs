@@ -58,8 +58,8 @@ export default function OnelinerDataStripTemplate() {
 
   const displayText = data.ccgf0 || data.f0 || data.headline || data.script || data.text || '';
 
-  let transformVal = 'translateX(calc(-100% - 150px))';
-  let opacityVal = animState === 'idle' ? 0 : 1;
+  let transformVal = 'translateX(calc(-100% - 600px))';
+  let opacityVal = animState === 'onair' ? 1 : 0;
   if (animState === 'onair') {
     transformVal = 'translateX(0px)';
   }

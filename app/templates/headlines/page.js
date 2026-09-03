@@ -57,7 +57,7 @@ export default function PureTextCenteredTemplate() {
   const displayText = data.f0 || data.headline || data.script || data.text || '';
 
   let transformVal = 'translate(calc(-50% - 100vw), -50%)';
-  let opacityVal = animState === 'idle' ? 0 : 1;
+  let opacityVal = animState === 'onair' ? 1 : 0;
   if (animState === 'onair') {
     transformVal = 'translate(-50%, -50%)';
   }
