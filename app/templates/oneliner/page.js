@@ -90,17 +90,17 @@ export default function OnelinerDataStripTemplate() {
           borderLeft: '30px solid #f6603b',
           borderRight: '30px solid #f6603b',
           borderRadius: '8px',
-          padding: '16px 36px',
+          padding: '6px 36px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           gap: '4px',
           maxWidth: '1800px',
-          minWidth: '580px'
+          minWidth: '1200px'
         }}>
           <span style={{
             color: '#000000',
-            fontSize: '40px',
+            fontSize: '50px',
             fontWeight: '800',
             letterSpacing: '-0.3px',
             // lineHeight: 1.2,

@@ -108,18 +108,19 @@ export default function TwolinerDataStripTemplate() {
           borderLeft: '30px solid #f6603b',
           borderRight: '30px solid #f6603b',
           borderRadius: '8px',
-          padding: '16px 36px',
+          padding: '2px 36px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: '4px',
+          gap: '2px',
           maxWidth: '1800px',
-          minWidth: '580px'
+                   minWidth: '1200px'
+
         }}>
           {/* Line 1: Name */}
           <span style={{
             color: '#05001d',
-            fontSize: '40px',
+            fontSize: '50px',
             fontWeight: 'bolder',
             letterSpacing: '-0.3px',
             // lineHeight: 1.15,
@@ -135,7 +136,7 @@ export default function TwolinerDataStripTemplate() {
           {designationText && (
             <span style={{
               color: 'rgb(7, 2, 24)',
-              fontSize: '30px',
+              fontSize: '40px',
               fontWeight: 'bolder',
               letterSpacing: '0px',
               // lineHeight: 1.15,
