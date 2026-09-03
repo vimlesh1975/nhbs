@@ -91,7 +91,7 @@ export default function TwolinerDataStripTemplate() {
       overflow: 'hidden',
       position: 'relative',
       background: 'transparent',
-      fontFamily: "'Outfit', 'Inter', system-ui, sans-serif"
+      fontFamily: "'Arial', 'Inter', system-ui, sans-serif"
     }}>
       {/* Twoliner Graphic Background Strip Bar (Name & Designation) */}
       {nameText && (
@@ -114,7 +114,7 @@ export default function TwolinerDataStripTemplate() {
           justifyContent: 'center',
           gap: '4px',
           maxWidth: '1800px',
-          minWidth: '1800px'
+          minWidth: '580px'
         }}>
           {/* Line 1: Name */}
           <span style={{

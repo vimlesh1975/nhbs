@@ -96,7 +96,7 @@ export default function OnelinerDataStripTemplate() {
           justifyContent: 'center',
           gap: '4px',
           maxWidth: '1800px',
-          minWidth: '1800px'
+          minWidth: '580px'
         }}>
           <span style={{
             color: '#000000',
